@@ -1,4 +1,4 @@
-package com.github.trqhxrd.untitledgame.engine.gui
+package com.github.trqhxrd.untitledgame.engine.gui.utils
 
 enum class MouseButton {
     LEFT, RIGHT, MIDDLE, UNDEFINED;

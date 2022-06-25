@@ -1,4 +1,4 @@
-package com.github.trqhxrd.untitledgame.engine.gui
+package com.github.trqhxrd.untitledgame.engine.gui.utils
 
 import java.awt.event.WindowEvent
 import java.awt.event.WindowListener

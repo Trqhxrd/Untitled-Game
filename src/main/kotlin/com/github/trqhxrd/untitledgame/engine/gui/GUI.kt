@@ -1,33 +1,27 @@
 package com.github.trqhxrd.untitledgame.engine.gui
 
 import com.github.trqhxrd.untitledgame.engine.Core
-import com.github.trqhxrd.untitledgame.engine.gui.display.Button
 import com.github.trqhxrd.untitledgame.engine.gui.display.Display
+import com.github.trqhxrd.untitledgame.engine.gui.utils.MouseButton
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.WindowEvent
 import java.awt.event.WindowListener
 import javax.swing.JFrame
 
-class GUI(val width: Int, val height: Int, title: String) {
+class GUI(width: Int, height: Int, title: String) {
 
     val title: String
     val frame: JFrame
-    val display: Display
+    var display: Display? = null
 
     init {
         this.title = title + this.pickTitleSuffix()
         this.frame = JFrame(this.title)
-        this.display = Display()
 
-        this.frame.setBounds(0, 0, this.width, this.height)
-        this.display.setBounds(0, 0, this.width, this.height)
+        this.frame.setBounds(0, 0, width, height)
 
         this.frame.layout = null
-
-        this.frame.add(this.display)
-        this.display.elements.add(Button(BoundingBox(100, 100, 100, 100)))
-
         this.frame.defaultCloseOperation = JFrame.DO_NOTHING_ON_CLOSE
         this.frame.addWindowListener(Listener)
         this.frame.addMouseListener(Listener)
@@ -40,6 +34,16 @@ class GUI(val width: Int, val height: Int, title: String) {
             line = url.readText().split("\n").random()
         } while (line.isBlank())
         return line
+    }
+
+    fun setCurrentDisplay(display: Display) {
+        if (this.display != null &&
+            this.frame.components.contains(this.display!!.component)
+        )
+            this.frame.remove(this.display!!.component)
+        this.display = display
+        this.display!!.component.setBounds(0, 0, this.frame.width, this.frame.height)
+        this.frame.add(this.display!!.component)
     }
 
     fun addWindowListener(listener: WindowListener) = this.frame.addWindowListener(listener)
@@ -126,10 +130,14 @@ class GUI(val width: Int, val height: Int, title: String) {
          * @param e the event to be processed
          */
         override fun mousePressed(e: MouseEvent) {
-            Core.gui.display.elements
-                .filter { it.clickCallback != null }
+            if (Core.gui.display != null) Core.gui.display!!.elements.stream()
                 .filter { it.bounds.contains(e.point) }
-                .forEach { it.clickCallback!!.onClick(it, e.point, MouseButton.forAWTId(e.button)) }
+                .forEach {
+                    if (it.internalClickCallback != null)
+                        it.internalClickCallback!!.onClick(it, e.point, MouseButton.forAWTId(e.button))
+                    if (it.clickCallback != null)
+                        it.clickCallback!!.onClick(it, e.point, MouseButton.forAWTId(e.button))
+                }
         }
 
         /**

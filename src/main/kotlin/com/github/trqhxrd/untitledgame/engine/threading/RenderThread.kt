@@ -4,6 +4,6 @@ import com.github.trqhxrd.untitledgame.engine.Core
 
 class RenderThread : AbstractThread("render", 10) {
     override fun loop() {
-        Core.gui.display.repaint()
+        Core.gui.display?.repaint()
     }
 }

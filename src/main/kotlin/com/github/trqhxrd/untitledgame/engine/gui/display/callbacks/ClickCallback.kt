@@ -1,7 +1,7 @@
 package com.github.trqhxrd.untitledgame.engine.gui.display.callbacks
 
-import com.github.trqhxrd.untitledgame.engine.gui.MouseButton
-import com.github.trqhxrd.untitledgame.engine.gui.display.DisplayElement
+import com.github.trqhxrd.untitledgame.engine.gui.utils.MouseButton
+import com.github.trqhxrd.untitledgame.engine.gui.display.elements.DisplayElement
 import java.awt.Point
 
 @FunctionalInterface
