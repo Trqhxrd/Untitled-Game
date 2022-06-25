@@ -155,7 +155,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>HelloWorld</mainClass>
+                            <mainClass>com.github.trqhxrd.untitledgame.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
