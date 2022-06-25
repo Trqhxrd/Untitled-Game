@@ -1,23 +1,23 @@
 package com.github.trqhxrd.untitledgame;
 
-import java.awt.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.UtilityClass;
+
+import javax.swing.*;
 
 public class Display {
-    private int höhe, länge;
-   private String Name;
+    @Getter
+    private final int height = 1080;
+    @Getter
+    private final int width = 1920;
+    @Getter
+    private final String title = "DER NAME";
 
-   private static Window Display= null;
+    private static Display display;
 
-    private Display() {
-        this.länge = 1920;
-        this.höhe = 1080;
-        this.Name = "DER NAME";
+    public static Display get() {
+        if (Display.display == null) Display.display = new Display();
+        return display;
     }
-
-    public static Window get() {
-        if (Window.Display == null) {
-            Window.Dispaly = new Window();
-        }
-
-
-    }
+}

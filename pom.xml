@@ -155,7 +155,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.github.trqhxrd.untitledgame.Main</mainClass>
+                            <mainClass>com.github.trqhxrd.untitledgame.engine.Core</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -212,6 +212,12 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
