@@ -1,10 +1,6 @@
-package com.github.trqhxrd.untitledgame;
+package com.github.trqhxrd.untitledgame.engine;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.UtilityClass;
-
-import javax.swing.*;
 
 public class Display {
     @Getter
