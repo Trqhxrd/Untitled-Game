@@ -1,6 +1,10 @@
 package com.github.trqhxrd.untitledgame.engine.gui
 
 import com.github.trqhxrd.untitledgame.engine.Core
+import com.github.trqhxrd.untitledgame.engine.gui.callback.Action
+import com.github.trqhxrd.untitledgame.engine.gui.callback.keyboard.KeyboardListener
+import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseButton
+import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseClickListener
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
 import org.apache.logging.log4j.LogManager
@@ -9,8 +13,17 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryUtil
+import java.awt.Point
 
-class Window(val initialWidth: Int, val initialHeight: Int, title: String, var background: Color = Color.BLACK) {
+class Window(
+    val initialWidth: Int,
+    val initialHeight: Int,
+    title: String,
+    var background: Color = Color.BLACK
+) {
+    var keyHandler: KeyHandler = KeyHandler(this)
+    var mouseHandler: MouseHandler = MouseHandler(this)
+
     var glfw: Long = -1
         private set
     var title: String
@@ -32,16 +45,30 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, var b
         )
         if (this.glfw == MemoryUtil.NULL) throw IllegalStateException("Failed to create window!")
 
-        GLFW.glfwSetCursorPosCallback(this.glfw, MouseHandler::mousePosCallback)
-        GLFW.glfwSetMouseButtonCallback(this.glfw, MouseHandler::mouseButtonCallback)
-        GLFW.glfwSetScrollCallback(this.glfw, MouseHandler::mouseScrollCallback)
-        GLFW.glfwSetKeyCallback(this.glfw, KeyHandler::keyCallback)
+        GLFW.glfwSetCursorPosCallback(this.glfw, this.mouseHandler::mousePosCallback)
+        GLFW.glfwSetMouseButtonCallback(this.glfw, this.mouseHandler::mouseButtonCallback)
+        GLFW.glfwSetScrollCallback(this.glfw, this.mouseHandler::mouseScrollCallback)
+        GLFW.glfwSetKeyCallback(this.glfw, this.keyHandler::keyCallback)
 
         GLFW.glfwMakeContextCurrent(this.glfw)
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
 
         GLFW.glfwShowWindow(this.glfw)
+
+        this.keyHandler.listeners.add(object : KeyboardListener {
+            override fun interact(window: Window, key: Int, action: Action) {
+                if (key == GLFW.GLFW_KEY_SPACE)
+                    this@Window.background = if (action == Action.PRESS) Color.CYAN else Color.BLACK
+            }
+        })
+
+        this.mouseHandler.clickListeners.add(object : MouseClickListener {
+            override fun click(window: Window, pos: Point, button: MouseButton, action: Action) {
+                if (button == MouseButton.LEFT) this@Window.background =
+                    if (action == Action.PRESS) Color.MAGENTA else Color.BLACK
+            }
+        })
     }
 
     companion object {
@@ -62,9 +89,6 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, var b
         GLFW.glfwSetWindowTitle(this.glfw, this.title)
         GL11.glClearColor(this.background.red, this.background.green, this.background.blue, this.background.alpha)
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
-
-        this.background = if (KeyHandler.isPressed(GLFW.GLFW_KEY_SPACE)) Color.BLUE
-        else Color.BLACK
 
         GLFW.glfwSwapBuffers(this.glfw)
 
