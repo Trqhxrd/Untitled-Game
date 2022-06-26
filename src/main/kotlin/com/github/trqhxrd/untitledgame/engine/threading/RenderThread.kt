@@ -1,10 +1,11 @@
 package com.github.trqhxrd.untitledgame.engine.threading
 
 import com.github.trqhxrd.untitledgame.engine.Core
-import kotlin.system.measureTimeMillis
+import org.lwjgl.glfw.GLFW
 
 class RenderThread : AbstractThread("render", 10) {
     override fun loop() {
-        println(measureTimeMillis { Core.gui.display?.repaint() })
+        Core.window.loop()
+        if (GLFW.glfwWindowShouldClose(Core.window.glfw)) Core.close()
     }
 }
