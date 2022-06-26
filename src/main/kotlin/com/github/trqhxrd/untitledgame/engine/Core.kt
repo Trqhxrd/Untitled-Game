@@ -1,6 +1,5 @@
 package com.github.trqhxrd.untitledgame.engine
 
-import com.github.trqhxrd.untitledgame.engine.gui.Color
 import com.github.trqhxrd.untitledgame.engine.threading.RenderThread
 import com.github.trqhxrd.untitledgame.engine.threading.TimerThread
 import java.lang.Thread.sleep
@@ -12,11 +11,9 @@ object Core {
     lateinit var timer: TimerThread
 
     fun init() {
-        Thread.currentThread().name= "main"
+        Thread.currentThread().name = "main"
         this.timer = TimerThread().also { it.start() }
         this.renderer = RenderThread().also { it.start() }
-
-        this.timer.add(1000) { this.renderer.window.background = Color.BLUE }
     }
 
     fun close() {

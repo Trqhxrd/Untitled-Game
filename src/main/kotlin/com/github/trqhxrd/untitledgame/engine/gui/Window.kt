@@ -59,13 +59,13 @@ class Window(
         this.keyHandler.listeners.add(object : KeyboardListener {
             override fun interact(window: Window, key: Int, action: Action) {
                 if (key == GLFW.GLFW_KEY_SPACE)
-                    this@Window.background = if (action == Action.PRESS) Color.CYAN else Color.BLACK
+                    window.background = if (action == Action.PRESS) Color.CYAN else Color.BLACK
             }
         })
 
         this.mouseHandler.clickListeners.add(object : MouseClickListener {
             override fun click(window: Window, pos: Point, button: MouseButton, action: Action) {
-                if (button == MouseButton.LEFT) this@Window.background =
+                if (button == MouseButton.LEFT) window.background =
                     if (action == Action.PRESS) Color.MAGENTA else Color.BLACK
             }
         })
