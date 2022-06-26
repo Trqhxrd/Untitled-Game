@@ -24,7 +24,8 @@ object Core {
     }
 
     fun close() {
-        this.renderThread.shutdownGracefully()
+        this.renderThread.interrupt()
+        //this.renderThread.shutdownGracefully()
         this.timer.shutdownGracefully()
         while (this.renderThread.state != Thread.State.TERMINATED ||
             this.timer.state != Thread.State.TERMINATED
