@@ -19,6 +19,8 @@ abstract class AbstractThread(name: String, val delay: Long) : Thread(name) {
 
     abstract fun loop()
 
+    abstract fun close()
+
     override fun interrupt() {
         super.interrupt()
         this.hasStopped = true

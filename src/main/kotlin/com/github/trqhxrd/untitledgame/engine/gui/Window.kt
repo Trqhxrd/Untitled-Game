@@ -1,6 +1,8 @@
 package com.github.trqhxrd.untitledgame.engine.gui
 
 import com.github.trqhxrd.untitledgame.engine.Core
+import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
+import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -30,6 +32,11 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, var b
         )
         if (this.glfw == MemoryUtil.NULL) throw IllegalStateException("Failed to create window!")
 
+        GLFW.glfwSetCursorPosCallback(this.glfw, MouseHandler::mousePosCallback)
+        GLFW.glfwSetMouseButtonCallback(this.glfw, MouseHandler::mouseButtonCallback)
+        GLFW.glfwSetScrollCallback(this.glfw, MouseHandler::mouseScrollCallback)
+        GLFW.glfwSetKeyCallback(this.glfw, KeyHandler::keyCallback)
+
         GLFW.glfwMakeContextCurrent(this.glfw)
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
@@ -56,6 +63,9 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, var b
         GL11.glClearColor(this.background.red, this.background.green, this.background.blue, this.background.alpha)
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
 
+        this.background = if (KeyHandler.isPressed(GLFW.GLFW_KEY_SPACE)) Color.BLUE
+        else Color.BLACK
+
         GLFW.glfwSwapBuffers(this.glfw)
 
         if (this.closeRequested()) Core.close()
@@ -65,5 +75,11 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, var b
 
     fun close() {
         GLFW.glfwSetWindowShouldClose(this.glfw, true)
+    }
+
+    fun destroy() {
+        GLFW.glfwDestroyWindow(this.glfw)
+        GLFW.glfwTerminate()
+        GLFW.glfwSetErrorCallback(null)
     }
 }

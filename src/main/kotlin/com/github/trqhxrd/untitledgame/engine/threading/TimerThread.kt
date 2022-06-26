@@ -10,6 +10,8 @@ class TimerThread : AbstractThread("timer", 10) {
 
     override fun init() {}
 
+    override fun close() {}
+
     override fun loop() {
         callbacks.keys().toList().forEach {
             this.callbacks[it] = this.callbacks[it]!! - 1

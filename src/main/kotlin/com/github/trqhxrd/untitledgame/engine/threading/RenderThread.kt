@@ -13,4 +13,8 @@ class RenderThread : AbstractThread("render", 10) {
     override fun loop() {
         this.window.update()
     }
+
+    override fun close() {
+        this.window.destroy()
+    }
 }
