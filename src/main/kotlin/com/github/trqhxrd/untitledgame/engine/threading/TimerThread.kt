@@ -2,7 +2,7 @@ package com.github.trqhxrd.untitledgame.engine.threading
 
 import java.util.concurrent.ConcurrentHashMap
 
-class TimerThread : AbstractThread("timer", 1) {
+class TimerThread : AbstractThread("timer", 10) {
 
     private val callbacks = ConcurrentHashMap<Runnable, Long>()
 

@@ -8,10 +8,10 @@ import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryUtil
 
-class Window(val initialWidth: Int, val initialHeight: Int, title: String) {
-    val title: String
+class Window(val initialWidth: Int, val initialHeight: Int, title: String, var background: Color = Color.BLACK) {
     var glfw: Long = -1
         private set
+    var title: String
 
     init {
         this.title = title + randomTitleSuffix()
@@ -52,7 +52,8 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String) {
     fun update() {
         GLFW.glfwPollEvents()
 
-        GL11.glClearColor(1f, 0f, 0f, 1f)
+        GLFW.glfwSetWindowTitle(this.glfw, this.title)
+        GL11.glClearColor(this.background.red, this.background.green, this.background.blue, this.background.alpha)
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
 
         GLFW.glfwSwapBuffers(this.glfw)
