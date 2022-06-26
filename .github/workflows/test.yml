@@ -19,9 +19,6 @@ jobs:
           java-version: '18'
           distribution: 'temurin'
           cache: maven
-          server-id: trqhxrd
-          server-username: M2_USERNAME
-          server-password: M2_PASSWORD
       - name: Test with Maven
         run: ./mvnw -B clean test
       - name: Package with Maven
