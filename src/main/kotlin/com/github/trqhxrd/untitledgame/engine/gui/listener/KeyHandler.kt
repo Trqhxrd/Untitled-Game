@@ -7,7 +7,7 @@ object KeyHandler {
 
     @JvmStatic
     fun keyCallback(window: Long, key: Int, scancode: Int, action: Int, mods: Int) {
-        this.keyPressed[key] = action == GLFW.GLFW_PRESS
+        this.keyPressed[key] = action != GLFW.GLFW_RELEASE
     }
 
     fun isPressed(key: Int) =  this.keyPressed[key]
