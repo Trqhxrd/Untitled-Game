@@ -8,6 +8,8 @@ class TimerThread : AbstractThread("timer", 1) {
 
     fun add(delay: Long, callback: () -> Unit) = this.callbacks.put(callback, delay)
 
+    override fun init() {}
+
     override fun loop() {
         callbacks.keys().toList().forEach {
             this.callbacks[it] = this.callbacks[it]!! - 1

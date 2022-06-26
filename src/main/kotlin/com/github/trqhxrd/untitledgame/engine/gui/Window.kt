@@ -49,7 +49,7 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String) {
         }
     }
 
-    fun loop() {
+    fun update() {
         GLFW.glfwPollEvents()
 
         GL11.glClearColor(1f, 0f, 0f, 1f)
@@ -57,6 +57,12 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String) {
 
         GLFW.glfwSwapBuffers(this.glfw)
 
-        if (GLFW.glfwWindowShouldClose(this.glfw)) Core.close()
+        if (this.closeRequested()) Core.close()
+    }
+
+    fun closeRequested() = GLFW.glfwWindowShouldClose(this.glfw)
+
+    fun close() {
+        GLFW.glfwSetWindowShouldClose(this.glfw, true)
     }
 }
