@@ -4,6 +4,9 @@ import com.github.trqhxrd.untitledgame.engine.Core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class Main {
 
     public static final Logger logger = LogManager.getLogger("main");
@@ -12,5 +15,10 @@ public class Main {
         Core.INSTANCE.init();
 
         logger.info("Hello World!");
+
+       // Render r = new Render();
+
+
+
     }
 }
