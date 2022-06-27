@@ -3,7 +3,7 @@ package com.github.trqhxrd.untitledgame.engine.gui.scene
 import com.github.trqhxrd.untitledgame.engine.gui.Color
 import com.github.trqhxrd.untitledgame.engine.gui.Window
 import org.lwjgl.BufferUtils
-import org.lwjgl.opengl.GL30.*
+import org.lwjgl.opengl.GL30
 
 
 class DebugScene(window: Window) : Scene(window, background = Color.BLACK) {
@@ -56,80 +56,80 @@ class DebugScene(window: Window) : Scene(window, background = Color.BLACK) {
     private var eboID: Int = 0
 
     init {
-        vertexID = glCreateShader(GL_VERTEX_SHADER)
-        glShaderSource(vertexID, vertexShaderSrc)
-        glCompileShader(vertexID)
+        vertexID = GL30.glCreateShader(GL30.GL_VERTEX_SHADER)
+        GL30.glShaderSource(vertexID, vertexShaderSrc)
+        GL30.glCompileShader(vertexID)
 
-        var success: Int = glGetShaderi(vertexID, GL_COMPILE_STATUS)
-        if (success == GL_FALSE) {
-            val len: Int = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH)
+        var success: Int = GL30.glGetShaderi(vertexID, GL30.GL_COMPILE_STATUS)
+        if (success == GL30.GL_FALSE) {
+            val len: Int = GL30.glGetShaderi(vertexID, GL30.GL_INFO_LOG_LENGTH)
             println("ERROR: 'defaultShader.glsl'\n\tVertex shader compilation failed.")
-            System.out.println(glGetShaderInfoLog(vertexID, len))
+            println(GL30.glGetShaderInfoLog(vertexID, len))
             assert(false) { "" }
         }
 
-        fragmentID = glCreateShader(GL_FRAGMENT_SHADER)
-        glShaderSource(fragmentID, fragmentShaderSrc)
-        glCompileShader(fragmentID)
+        fragmentID = GL30.glCreateShader(GL30.GL_FRAGMENT_SHADER)
+        GL30.glShaderSource(fragmentID, fragmentShaderSrc)
+        GL30.glCompileShader(fragmentID)
 
-        success = glGetShaderi(fragmentID, GL_COMPILE_STATUS)
-        if (success == GL_FALSE) {
-            val len: Int = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH)
+        success = GL30.glGetShaderi(fragmentID, GL30.GL_COMPILE_STATUS)
+        if (success == GL30.GL_FALSE) {
+            val len: Int = GL30.glGetShaderi(fragmentID, GL30.GL_INFO_LOG_LENGTH)
             println("ERROR: 'defaultShader.glsl'\n\tFragment shader compilation failed.")
-            System.out.println(glGetShaderInfoLog(fragmentID, len))
+            println(GL30.glGetShaderInfoLog(fragmentID, len))
             assert(false) { "" }
         }
 
-        shaderProgram = glCreateProgram()
-        glAttachShader(shaderProgram, vertexID)
-        glAttachShader(shaderProgram, fragmentID)
-        glLinkProgram(shaderProgram)
+        shaderProgram = GL30.glCreateProgram()
+        GL30.glAttachShader(shaderProgram, vertexID)
+        GL30.glAttachShader(shaderProgram, fragmentID)
+        GL30.glLinkProgram(shaderProgram)
 
-        success = glGetProgrami(shaderProgram, GL_LINK_STATUS)
-        if (success == GL_FALSE) {
-            val len: Int = glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH)
+        success = GL30.glGetProgrami(shaderProgram, GL30.GL_LINK_STATUS)
+        if (success == GL30.GL_FALSE) {
+            val len: Int = GL30.glGetProgrami(shaderProgram, GL30.GL_INFO_LOG_LENGTH)
             println("ERROR: 'defaultShader.glsl'\n\tLinking of shaders failed.")
-            System.out.println(glGetProgramInfoLog(shaderProgram, len))
+            println(GL30.glGetProgramInfoLog(shaderProgram, len))
             assert(false) { "" }
         }
 
-        vaoID = glGenVertexArrays()
-        glBindVertexArray(vaoID)
+        vaoID = GL30.glGenVertexArrays()
+        GL30.glBindVertexArray(vaoID)
 
         val vertexBuffer = BufferUtils.createFloatBuffer(vertexArray.size)
         vertexBuffer.put(vertexArray).flip()
 
-        vboID = glGenBuffers()
-        glBindBuffer(GL_ARRAY_BUFFER, vboID)
-        glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW)
+        vboID = GL30.glGenBuffers()
+        GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vboID)
+        GL30.glBufferData(GL30.GL_ARRAY_BUFFER, vertexBuffer, GL30.GL_STATIC_DRAW)
 
         val elementBuffer = BufferUtils.createIntBuffer(elementArray.size)
         elementBuffer.put(elementArray).flip()
-        eboID = glGenBuffers()
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW)
+        eboID = GL30.glGenBuffers()
+        GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, eboID)
+        GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL30.GL_STATIC_DRAW)
 
         val positionsSize = 3
         val colorSize = 4
         val floatSizeBytes = 4
         val vertexSizeBytes = (positionsSize + colorSize) * floatSizeBytes
-        glVertexAttribPointer(0, positionsSize, GL_FLOAT, false, vertexSizeBytes, 0)
-        glEnableVertexAttribArray(0)
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, (positionsSize * floatSizeBytes).toLong())
-        glEnableVertexAttribArray(1)
+        GL30.glVertexAttribPointer(0, positionsSize, GL30.GL_FLOAT, false, vertexSizeBytes, 0)
+        GL30.glEnableVertexAttribArray(0)
+        GL30.glVertexAttribPointer(1, colorSize, GL30.GL_FLOAT, false, vertexSizeBytes, (positionsSize * floatSizeBytes).toLong())
+        GL30.glEnableVertexAttribArray(1)
     }
 
     override fun update(dTime: Float) {
-        glUseProgram(shaderProgram)
-        glBindVertexArray(vaoID)
+        GL30.glUseProgram(shaderProgram)
+        GL30.glBindVertexArray(vaoID)
 
-        glEnableVertexAttribArray(0)
-        glEnableVertexAttribArray(1)
-        glDrawElements(GL_TRIANGLES, elementArray.size, GL_UNSIGNED_INT, 0)
+        GL30.glEnableVertexAttribArray(0)
+        GL30.glEnableVertexAttribArray(1)
+        GL30.glDrawElements(GL30.GL_TRIANGLES, elementArray.size, GL30.GL_UNSIGNED_INT, 0)
 
-        glDisableVertexAttribArray(0)
-        glDisableVertexAttribArray(1)
-        glBindVertexArray(0)
-        glUseProgram(0)
+        GL30.glDisableVertexAttribArray(0)
+        GL30.glDisableVertexAttribArray(1)
+        GL30.glBindVertexArray(0)
+        GL30.glUseProgram(0)
     }
 }
