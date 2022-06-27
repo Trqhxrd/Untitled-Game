@@ -9,7 +9,7 @@ import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseScrollList
 import org.lwjgl.glfw.GLFW
 import java.awt.Point
 
-open class MouseHandler(val window: Window) {
+open class MouseHandler(val window: Window, override var isEnabled: Boolean = false) : InputHandler {
     var scrollX: Double = .0
         private set
     var scrollY: Double = .0
@@ -37,6 +37,8 @@ open class MouseHandler(val window: Window) {
         this.yPos = yPos
         this.isDragging = this.mouseButtonPressed.any { it }
 
+        if (!this.isEnabled) return
+
         this.moveListeners.forEach {
             it.move(
                 this.window,
@@ -53,6 +55,8 @@ open class MouseHandler(val window: Window) {
             if (action == GLFW.GLFW_RELEASE) this.isDragging = false
         }
 
+        if (!this.isEnabled) return
+
         this.clickListeners.forEach {
             it.click(
                 this.window,
@@ -67,16 +71,11 @@ open class MouseHandler(val window: Window) {
         this.scrollX = xOffset
         this.scrollY = yOffset
 
+        if (!this.isEnabled) return
+
         this.scrollListeners.forEach {
             it.scroll(this.window, Point(this.scrollX.toInt(), this.scrollY.toInt()))
         }
-    }
-
-    fun endFrame() {
-        this.scrollX = .0
-        this.scrollY = .0
-        this.lastX = this.xPos
-        this.lastY = this.yPos
     }
 
     fun deltaX() = (this.lastX - this.xPos)

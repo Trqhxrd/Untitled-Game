@@ -1,10 +1,7 @@
 package com.github.trqhxrd.untitledgame.engine.gui
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
@@ -12,9 +9,10 @@ import kotlin.test.assertTrue
 internal class ColorTest {
 
     @Test
-    fun constructors() {
-        assertThrows<IllegalArgumentException> { Color(2f, 1f, 1f) }
-        assertDoesNotThrow { Color(1f, 1f, 1f) }
+    fun testInit() {
+        assertEquals(Color(1f, 0f, 0f, 1f), Color(3f, 0f, 0f, 1f))
+        assertEquals(Color(0f, 0f, 0f, 1f), Color(-3f, 0f, 0f, 1f))
+        assertNotEquals(Color(1f, 0f, 0f, 1f), Color(3f, 0f, 1f, 1f))
     }
 
     @Test

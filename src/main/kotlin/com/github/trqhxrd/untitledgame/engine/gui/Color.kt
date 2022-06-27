@@ -1,20 +1,14 @@
 package com.github.trqhxrd.untitledgame.engine.gui
 
+import kotlin.math.max
 import kotlin.math.min
 
 class Color(red: Float, green: Float, blue: Float, alpha: Float) {
 
-    val red: Float
-    val green: Float
-    val blue: Float
-    val alpha: Float
-
-    init {
-        this.red = this.check(red)
-        this.green = this.check(green)
-        this.blue = this.check(blue)
-        this.alpha = this.check(alpha)
-    }
+    val red: Float = this.check(red)
+    val green: Float = this.check(green)
+    val blue: Float = this.check(blue)
+    val alpha: Float = this.check(alpha)
 
     companion object {
         val WHITE = Color(1f, 1f, 1f, 1f)
@@ -26,6 +20,8 @@ class Color(red: Float, green: Float, blue: Float, alpha: Float) {
         val MAGENTA = Color(1f, 0f, 1f, 1f)
         val YELLOW = Color(1f, 1f, 0f, 1f)
         val CYAN = Color(0f, 1f, 1f, 1f)
+
+        val values = arrayOf(WHITE, GRAY, BLACK, RED, GREEN, BLUE, MAGENTA, YELLOW, CYAN)
     }
 
     constructor(color: Color) : this(color.red, color.green, color.blue, color.alpha)
@@ -34,17 +30,13 @@ class Color(red: Float, green: Float, blue: Float, alpha: Float) {
     fun add(color: Color) = this.add(color.red, color.green, color.blue, color.alpha)
 
     fun add(red: Float = 0f, green: Float = 0f, blue: Float = 0f, alpha: Float = 0f) = Color(
-        min(this.red + red, 1f),
-        min(this.green + green, 1f),
-        min(this.blue + blue, 1f),
-        min(this.alpha + alpha, 1f)
+        this.red + red,
+        this.green + green,
+        this.blue + blue,
+        this.alpha + alpha
     )
 
-    private fun check(color: Float): Float {
-        if (!(0f..1f).contains(color))
-            throw IllegalArgumentException("Cannot assign color value smaller than 0 or greater than 1 ($color).")
-        else return color
-    }
+    private fun check(color: Float): Float = min(max(color, 0f), 1f)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
