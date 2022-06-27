@@ -22,9 +22,6 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
             field = value
         }
 
-    var fps = -1f
-        private set
-
     private var beginTime = Utils.getTime()
     private var endTime = -1f
     private var dTime = -1f
@@ -69,26 +66,24 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
 
         GLFW.glfwSetWindowTitle(this.glfw, this.title)
         if (this.dTime >= 0 && this.scene != null) {
-            GL11.glClearColor(
+         /*   GL11.glClearColor(
                 this.scene!!.background.red,
                 this.scene!!.background.green,
                 this.scene!!.background.blue,
                 this.scene!!.background.alpha
             )
-
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
+*/
             this.scene!!.update(this.dTime)
 
         } else if (this.scene == null) GL11.glClearColor(1f, 1f, 1f, 1f)
 
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
         GLFW.glfwSwapBuffers(this.glfw)
 
         if (this.closeRequested()) Core.close()
 
         this.endTime = Utils.getTime()
         this.dTime = this.endTime - this.beginTime
-        this.fps = 1f / this.dTime
-        logger.debug("FPS: ${this.fps}")
         this.beginTime = this.endTime
     }
 
