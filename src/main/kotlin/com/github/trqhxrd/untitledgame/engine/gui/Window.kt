@@ -18,7 +18,7 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
     var scene: Scene? = scene
         set(value) {
             field?.disable()
-            value!!.enable()
+            value?.enable()
             field = value
         }
 
@@ -66,14 +66,14 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
 
         GLFW.glfwSetWindowTitle(this.glfw, this.title)
         if (this.dTime >= 0 && this.scene != null) {
-         /*   GL11.glClearColor(
+            GL11.glClearColor(
                 this.scene!!.background.red,
                 this.scene!!.background.green,
                 this.scene!!.background.blue,
                 this.scene!!.background.alpha
             )
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
-*/
+
             this.scene!!.update(this.dTime)
 
         } else if (this.scene == null) GL11.glClearColor(1f, 1f, 1f, 1f)
