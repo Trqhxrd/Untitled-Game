@@ -29,8 +29,8 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
     init {
         this.title = title + randomTitleSuffix()
 
-        GLFWErrorCallback.createPrint(System.err).set()
         if (!GLFW.glfwInit()) throw IllegalStateException("GLFW could not be initialized!")
+        GLFW.glfwSetErrorCallback(GLFWErrorCallback.createThrow())
 
         GLFW.glfwDefaultWindowHints()
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE)

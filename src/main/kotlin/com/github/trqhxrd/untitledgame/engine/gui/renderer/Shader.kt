@@ -2,12 +2,11 @@ package com.github.trqhxrd.untitledgame.engine.gui.renderer
 
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.opengl.GL30
-import org.lwjgl.opengl.GL46
 import java.io.IOException
 
 open class Shader(val path: String, val type: Type) {
 
-    var shaderId: Int
+    var shaderId: Int = -1
         protected set
     var programId = -1
         protected set
