@@ -49,6 +49,14 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
         GLFW.glfwShowWindow(this.glfw)
     }
 
+
+
+
+
+
+
+
+
     companion object {
         val logger = LogManager.getLogger(Window::class.java)!!
 
