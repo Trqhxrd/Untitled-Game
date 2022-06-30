@@ -14,11 +14,6 @@ public class Main {
     public static void main(String[] args) {
         Core.INSTANCE.init();
 
-        logger.info("START");
-
-        // Render r = new Render();
-
-
-
+        logger.info("Hello World!");
     }
 }

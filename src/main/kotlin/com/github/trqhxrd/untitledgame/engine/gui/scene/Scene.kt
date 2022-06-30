@@ -5,14 +5,12 @@ import com.github.trqhxrd.untitledgame.engine.gui.Window
 import com.github.trqhxrd.untitledgame.engine.gui.listener.InputService
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
-import com.github.trqhxrd.untitledgame.engine.gui.renderer.FragmentShader
-import com.github.trqhxrd.untitledgame.engine.gui.renderer.VertexShader
+import com.github.trqhxrd.untitledgame.engine.gui.renderer.ShaderSet
 import org.lwjgl.glfw.GLFW
 
 abstract class Scene(
     val window: Window,
-    val vertexShader: VertexShader,
-    val fragmentShader: FragmentShader,
+    val shader: ShaderSet = ShaderSet(),
     override var mouseHandler: MouseHandler = MouseHandler(window, false),
     override var keyHandler: KeyHandler = KeyHandler(window, false),
     var background: Color = Color.BLACK
@@ -29,28 +27,15 @@ abstract class Scene(
         this.mouseHandler.isEnabled = true
         this.keyHandler.isEnabled = true
 
-        this.compileShaders()
-    }
-
-    fun compileShaders() {
-        this.vertexShader.compile()
-        this.fragmentShader.compile()
-    }
-
-    fun linkShaders() {
-        this.vertexShader.link()
-        this.fragmentShader.link()
-    }
-
-    fun unlinkShaders() {
-        this.vertexShader.unlink()
-        this.fragmentShader.unlink()
+        if (!this.shader.validate()) throw NullPointerException("The shader in invalid!")
     }
 
     fun disable() {
         this.mouseHandler.isEnabled = false
         this.keyHandler.isEnabled = false
-
-        this.unlinkShaders()
     }
+
+    fun addVertexShader(path: String) = this.shader.addVertex(path)
+
+    fun addFragmentShader(path: String) = this.shader.addFragment(path)
 }

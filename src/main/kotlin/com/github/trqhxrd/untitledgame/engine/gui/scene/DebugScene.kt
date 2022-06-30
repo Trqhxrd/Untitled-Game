@@ -2,18 +2,11 @@ package com.github.trqhxrd.untitledgame.engine.gui.scene
 
 import com.github.trqhxrd.untitledgame.engine.gui.Color
 import com.github.trqhxrd.untitledgame.engine.gui.Window
-import com.github.trqhxrd.untitledgame.engine.gui.renderer.FragmentShader
-import com.github.trqhxrd.untitledgame.engine.gui.renderer.VertexShader
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL30
 
 
-class DebugScene(window: Window) : Scene(
-    window,
-    VertexShader("/assets/shaders/vertex.glsl"),
-    FragmentShader("/assets/shaders/fragment.glsl"),
-    background = Color.WHITE
-) {
+class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
     private val vertexArray = floatArrayOf(
         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
         -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
@@ -31,6 +24,9 @@ class DebugScene(window: Window) : Scene(
     private var eboID: Int = 0
 
     init {
+        this.shader.addVertex("/assets/shaders/vertex.glsl")
+        this.shader.addFragment("/assets/shaders/fragment.glsl")
+
         vaoID = GL30.glGenVertexArrays()
         GL30.glBindVertexArray(vaoID)
 
@@ -65,7 +61,7 @@ class DebugScene(window: Window) : Scene(
     }
 
     override fun update(dTime: Float) {
-        this.linkShaders()
+        this.shader.use()
         GL30.glBindVertexArray(vaoID)
 
         GL30.glEnableVertexAttribArray(0)
@@ -76,6 +72,6 @@ class DebugScene(window: Window) : Scene(
         GL30.glDisableVertexAttribArray(1)
         GL30.glBindVertexArray(0)
 
-        this.unlinkShaders()
+        this.shader.detach()
     }
 }

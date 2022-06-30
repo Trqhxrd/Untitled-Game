@@ -2,7 +2,6 @@ package com.github.trqhxrd.untitledgame.engine.gui
 
 import com.github.trqhxrd.untitledgame.engine.Core
 import com.github.trqhxrd.untitledgame.engine.gui.scene.Scene
-import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
@@ -49,17 +48,7 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
         GLFW.glfwShowWindow(this.glfw)
     }
 
-
-
-
-
-
-
-
-
     companion object {
-        val logger = LogManager.getLogger(Window::class.java)!!
-
         fun randomTitleSuffix(): String {
             val url = this::class.java.getResource("/assets/title-suffixes.txt")!!
             var suffix: String
@@ -102,6 +91,7 @@ class Window(val initialWidth: Int, val initialHeight: Int, title: String, scene
     }
 
     fun destroy() {
+        this.scene?.shader?.destroy()
         GLFW.glfwDestroyWindow(this.glfw)
         GLFW.glfwTerminate()
         GLFW.glfwSetErrorCallback(null)
