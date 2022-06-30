@@ -1,6 +1,7 @@
 package com.github.trqhxrd.untitledgame.engine.gui.scene
 
 import com.github.trqhxrd.untitledgame.engine.gui.Color
+import com.github.trqhxrd.untitledgame.engine.gui.Utils
 import com.github.trqhxrd.untitledgame.engine.gui.Window
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL30
@@ -8,10 +9,10 @@ import org.lwjgl.opengl.GL30
 
 class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
     private val vertexArray = floatArrayOf(
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-        -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+        100.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 100.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        100.5f, 100.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
     )
 
     private val elementArray = intArrayOf(
@@ -61,7 +62,14 @@ class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
     }
 
     override fun update(dTime: Float) {
+        this.camera.position.x -= dTime * 50f
+        this.camera.position.y -= dTime * 20f
+
         this.shader.use()
+        this.shader.uploadMat4f("uProjection", this.camera.projection)
+        this.shader.uploadMat4f("uView", this.camera.view)
+        this.shader.uploadFloat("uTime", Utils.getTime())
+
         GL30.glBindVertexArray(vaoID)
 
         GL30.glEnableVertexAttribArray(0)

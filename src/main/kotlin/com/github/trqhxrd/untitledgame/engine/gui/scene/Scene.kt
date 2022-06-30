@@ -5,12 +5,15 @@ import com.github.trqhxrd.untitledgame.engine.gui.Window
 import com.github.trqhxrd.untitledgame.engine.gui.listener.InputService
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
-import com.github.trqhxrd.untitledgame.engine.gui.renderer.ShaderSet
+import com.github.trqhxrd.untitledgame.engine.gui.renderer.Camera
+import com.github.trqhxrd.untitledgame.engine.gui.renderer.shader.ShaderSet
+import org.joml.Vector2f
 import org.lwjgl.glfw.GLFW
 
 abstract class Scene(
     val window: Window,
     val shader: ShaderSet = ShaderSet(),
+    val camera: Camera = Camera(),
     override var mouseHandler: MouseHandler = MouseHandler(window, false),
     override var keyHandler: KeyHandler = KeyHandler(window, false),
     var background: Color = Color.BLACK

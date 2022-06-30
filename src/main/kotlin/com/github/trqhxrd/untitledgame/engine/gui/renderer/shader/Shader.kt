@@ -1,4 +1,4 @@
-package com.github.trqhxrd.untitledgame.engine.gui.renderer
+package com.github.trqhxrd.untitledgame.engine.gui.renderer.shader
 
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.opengl.GL30
