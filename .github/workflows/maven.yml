@@ -11,7 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 18
@@ -20,20 +19,5 @@ jobs:
           java-version: '18'
           distribution: 'temurin'
           cache: maven
-          server-id: trqhxrd
-          server-username: M2_USERNAME
-          server-password: M2_PASSWORD
       - name: Build with Maven
         run: ./mvnw -B clean package
-      - name: Deploy with Maven
-        run: ./mvnw -B deploy --file pom.xml
-        env:
-          M2_USERNAME: ${{ secrets.M2_USERNAME }}
-          M2_PASSWORD: ${{ secrets.M2_PASSWORD }}
-      - name: Generate Site with Maven
-        run: ./mvnw -B site --file pom.xml
-      - name: Deploy Page
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
-        with:
-          branch: gh-pages
-          folder: target/site
