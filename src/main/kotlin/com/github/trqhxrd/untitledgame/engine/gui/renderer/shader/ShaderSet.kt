@@ -114,6 +114,11 @@ class ShaderSet {
         GL30.glUniform1i(varLoc, value)
     }
 
+    fun uploadTexture(varName: String, slot: Int) {
+        val varLoc = this.prepareUpload(varName)
+        GL30.glUniform1i(varLoc, slot)
+    }
+
     private fun prepareUpload(varName: String): Int {
         val varLoc = GL30.glGetUniformLocation(this.program, varName)
         this.use()

@@ -3,16 +3,17 @@ package com.github.trqhxrd.untitledgame.engine.gui.scene
 import com.github.trqhxrd.untitledgame.engine.gui.Color
 import com.github.trqhxrd.untitledgame.engine.gui.Utils
 import com.github.trqhxrd.untitledgame.engine.gui.Window
+import com.github.trqhxrd.untitledgame.engine.gui.renderer.Texture
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL30
 
 
 class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
     private val vertexArray = floatArrayOf(
-        100.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, 100.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-        100.5f, 100.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+        100.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1f, 0f,
+        0.5f, 100.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0f, 1f,
+        100.5f, 100.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1f, 1f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0f, 0f
     )
 
     private val elementArray = intArrayOf(
@@ -20,13 +21,16 @@ class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
         0, 1, 3
     )
 
+    private val texture: Texture
+
     private var vaoID = 0
     private var vboID: Int = 0
     private var eboID: Int = 0
 
     init {
-        this.shader.addVertex("/assets/shaders/vertex.glsl")
-        this.shader.addFragment("/assets/shaders/fragment.glsl")
+        this.shader.addVertex("assets/shaders/vertex.glsl")
+        this.shader.addFragment("assets/shaders/fragment.glsl")
+        this.texture = Texture("assets/textures/testImage.png")
 
         vaoID = GL30.glGenVertexArrays()
         GL30.glBindVertexArray(vaoID)
@@ -46,19 +50,30 @@ class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
 
         val positionsSize = 3
         val colorSize = 4
-        val floatSizeBytes = 4
-        val vertexSizeBytes = (positionsSize + colorSize) * floatSizeBytes
+        val uvSize = 2
+        val vertexSizeBytes = (positionsSize + colorSize + uvSize) * Float.SIZE_BYTES
         GL30.glVertexAttribPointer(0, positionsSize, GL30.GL_FLOAT, false, vertexSizeBytes, 0)
         GL30.glEnableVertexAttribArray(0)
+
         GL30.glVertexAttribPointer(
             1,
             colorSize,
             GL30.GL_FLOAT,
             false,
             vertexSizeBytes,
-            (positionsSize * floatSizeBytes).toLong()
+            (positionsSize * Float.SIZE_BYTES).toLong()
         )
         GL30.glEnableVertexAttribArray(1)
+
+        GL30.glVertexAttribPointer(
+            2,
+            uvSize,
+            GL30.GL_FLOAT,
+            false,
+            vertexSizeBytes,
+            ((positionsSize + colorSize) * Float.SIZE_BYTES).toLong()
+        )
+        GL30.glEnableVertexAttribArray(2)
     }
 
     override fun update(dTime: Float) {
@@ -66,9 +81,14 @@ class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
         this.camera.position.y -= dTime * 20f
 
         this.shader.use()
+
         this.shader.uploadMat4f("uProjection", this.camera.projection)
         this.shader.uploadMat4f("uView", this.camera.view)
         this.shader.uploadFloat("uTime", Utils.getTime())
+
+        this.shader.uploadTexture("TEX_SAMPLER", 0)
+        GL30.glActiveTexture(GL30.GL_TEXTURE0)
+        this.texture.bind()
 
         GL30.glBindVertexArray(vaoID)
 
@@ -80,6 +100,7 @@ class DebugScene(window: Window) : Scene(window, background = Color.WHITE) {
         GL30.glDisableVertexAttribArray(1)
         GL30.glBindVertexArray(0)
 
+        this.texture.unbind()
         this.shader.detach()
     }
 }

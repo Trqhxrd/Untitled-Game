@@ -4,14 +4,16 @@ import org.apache.logging.log4j.LogManager
 import org.lwjgl.opengl.GL30
 import java.io.IOException
 
-open class Shader(val path: String, val type: Type) {
+open class Shader(path: String, val type: Type) {
 
+    val path: String
     var id: Int = -1
         protected set
     var src: String
     private val logger = LogManager.getLogger("Shader")
 
     init {
+        this.path = if (path[0] == '/') path else "/$path"
         val url = this::class.java.getResource(this.path)!!
         this.src = url.readText()
     }
