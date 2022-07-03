@@ -7,6 +7,7 @@ import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseButton
 import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseClickListener
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
+import com.github.trqhxrd.untitledgame.engine.gui.util.Time
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
@@ -14,6 +15,7 @@ import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryUtil
 import java.awt.Point
+import kotlin.math.roundToInt
 
 class Window(
     val initialWidth: Int,
@@ -27,6 +29,11 @@ class Window(
     var glfw: Long = -1
         private set
     var title: String
+
+    private var beginTime = 0.0
+    private var endTime = 0.0
+    private var dTime = 0.0
+    private var fpsUtil = 0.0
 
     init {
         this.title = title + randomTitleSuffix()
@@ -87,12 +94,27 @@ class Window(
         GLFW.glfwPollEvents()
 
         GLFW.glfwSetWindowTitle(this.glfw, this.title)
-        GL11.glClearColor(this.background.red, this.background.green, this.background.blue, this.background.alpha)
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
+        if (this.dTime >= 0) {
+            GL11.glClearColor(
+                this.background.red,
+                this.background.green,
+                this.background.blue,
+                this.background.alpha
+            )
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
+        }
 
         GLFW.glfwSwapBuffers(this.glfw)
 
         if (this.closeRequested()) Core.close()
+
+        this.endTime = Time.now()
+        this.dTime = this.endTime - this.beginTime
+        this.beginTime = this.endTime
+        if (this.fpsUtil + 1 < this.endTime) {
+            this.fpsUtil = this.endTime
+            logger.debug("FPS: ${(1f / this.dTime).roundToInt()}")
+        }
     }
 
     fun closeRequested() = GLFW.glfwWindowShouldClose(this.glfw)
