@@ -1,6 +1,6 @@
 package com.github.trqhxrd.untitledgame.engine.gui.callback.keyboard
 
-import com.github.trqhxrd.untitledgame.engine.gui.Window
+import com.github.trqhxrd.untitledgame.engine.gui.window.Window
 import com.github.trqhxrd.untitledgame.engine.gui.callback.Action
 
 @FunctionalInterface

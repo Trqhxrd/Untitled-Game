@@ -1,6 +1,6 @@
 package com.github.trqhxrd.untitledgame.engine
 
-import com.github.trqhxrd.untitledgame.engine.gui.Color
+import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import com.github.trqhxrd.untitledgame.engine.threading.RenderThread
 import com.github.trqhxrd.untitledgame.engine.threading.TimerThread
 import java.lang.Thread.sleep

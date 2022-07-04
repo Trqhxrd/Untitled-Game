@@ -1,4 +1,4 @@
-package com.github.trqhxrd.untitledgame.engine.gui
+package com.github.trqhxrd.untitledgame.engine.gui.util
 
 import kotlin.math.min
 

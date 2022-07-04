@@ -1,10 +1,10 @@
 package com.github.trqhxrd.untitledgame.engine.gui
 
+import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue

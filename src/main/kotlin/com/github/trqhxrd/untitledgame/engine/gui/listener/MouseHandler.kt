@@ -1,15 +1,15 @@
 package com.github.trqhxrd.untitledgame.engine.gui.listener
 
-import com.github.trqhxrd.untitledgame.engine.gui.Window
 import com.github.trqhxrd.untitledgame.engine.gui.callback.Action
 import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseButton
 import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseClickListener
 import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseMoveListener
 import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseScrollListener
+import com.github.trqhxrd.untitledgame.engine.gui.window.Scene
 import org.lwjgl.glfw.GLFW
 import java.awt.Point
 
-open class MouseHandler(val window: Window) {
+open class MouseHandler(val scene: Scene) {
     var scrollX: Double = .0
         private set
     var scrollY: Double = .0
@@ -39,7 +39,7 @@ open class MouseHandler(val window: Window) {
 
         this.moveListeners.forEach {
             it.move(
-                this.window,
+                this.scene.window,
                 Point(this.lastX.toInt(), this.lastY.toInt()),
                 Point(this.xPos.toInt(), this.yPos.toInt()),
                 Point(this.deltaX().toInt(), this.deltaY().toInt())
@@ -55,7 +55,7 @@ open class MouseHandler(val window: Window) {
 
         this.clickListeners.forEach {
             it.click(
-                this.window,
+                this.scene.window,
                 Point(this.xPos.toInt(), this.yPos.toInt()),
                 MouseButton.fromGLFWId(button),
                 Action.getByGLFWId(action)
@@ -68,7 +68,7 @@ open class MouseHandler(val window: Window) {
         this.scrollY = yOffset
 
         this.scrollListeners.forEach {
-            it.scroll(this.window, Point(this.scrollX.toInt(), this.scrollY.toInt()))
+            it.scroll(this.scene.window, Point(this.scrollX.toInt(), this.scrollY.toInt()))
         }
     }
 
@@ -79,9 +79,23 @@ open class MouseHandler(val window: Window) {
         this.lastY = this.yPos
     }
 
-    fun deltaX() = (this.lastX - this.xPos)
+    fun deltaX() = this.lastX - this.xPos
+
     fun deltaY() = this.lastY - this.yPos
+
     fun mouseButtonDown(button: Int) =
         if (button < this.mouseButtonPressed.size) this.mouseButtonPressed[button]
         else false
+
+    fun enable() {
+        GLFW.glfwSetCursorPosCallback(this.scene.window.glfw, this::mousePosCallback)
+        GLFW.glfwSetMouseButtonCallback(this.scene.window.glfw, this::mouseButtonCallback)
+        GLFW.glfwSetScrollCallback(this.scene.window.glfw, this::mouseScrollCallback)
+    }
+
+    fun disable() {
+        GLFW.glfwSetCursorPosCallback(this.scene.window.glfw, null)
+        GLFW.glfwSetMouseButtonCallback(this.scene.window.glfw, null)
+        GLFW.glfwSetScrollCallback(this.scene.window.glfw, null)
+    }
 }

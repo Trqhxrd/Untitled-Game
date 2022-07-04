@@ -1,12 +1,7 @@
-package com.github.trqhxrd.untitledgame.engine.gui
+package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.Core
-import com.github.trqhxrd.untitledgame.engine.gui.callback.Action
-import com.github.trqhxrd.untitledgame.engine.gui.callback.keyboard.KeyboardListener
-import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseButton
-import com.github.trqhxrd.untitledgame.engine.gui.callback.mouse.MouseClickListener
-import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
-import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
+import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import com.github.trqhxrd.untitledgame.engine.gui.util.Time
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
@@ -14,7 +9,6 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.system.MemoryUtil
-import java.awt.Point
 import kotlin.math.roundToInt
 
 class Window(
@@ -23,12 +17,17 @@ class Window(
     title: String,
     var background: Color = Color.BLACK
 ) {
-    var keyHandler: KeyHandler = KeyHandler(this)
-    var mouseHandler: MouseHandler = MouseHandler(this)
-
+    private val logger = LogManager.getLogger()!!
     var glfw: Long = -1
         private set
     var title: String
+    var scene: Scene? = null
+        set(value) {
+            field?.stop()
+            logger.debug("Switching scene from '${field?.name}' to '${value?.name}'.")
+            field = value
+            value?.init()
+        }
 
     private var beginTime = 0.0
     private var endTime = 0.0
@@ -52,35 +51,14 @@ class Window(
         )
         if (this.glfw == MemoryUtil.NULL) throw IllegalStateException("Failed to create window!")
 
-        GLFW.glfwSetCursorPosCallback(this.glfw, this.mouseHandler::mousePosCallback)
-        GLFW.glfwSetMouseButtonCallback(this.glfw, this.mouseHandler::mouseButtonCallback)
-        GLFW.glfwSetScrollCallback(this.glfw, this.mouseHandler::mouseScrollCallback)
-        GLFW.glfwSetKeyCallback(this.glfw, this.keyHandler::keyCallback)
-
         GLFW.glfwMakeContextCurrent(this.glfw)
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
 
         GLFW.glfwShowWindow(this.glfw)
-
-        this.keyHandler.listeners.add(object : KeyboardListener {
-            override fun interact(window: Window, key: Int, action: Action) {
-                if (key == GLFW.GLFW_KEY_SPACE)
-                    this@Window.background = if (action == Action.PRESS) Color.CYAN else Color.BLACK
-            }
-        })
-
-        this.mouseHandler.clickListeners.add(object : MouseClickListener {
-            override fun click(window: Window, pos: Point, button: MouseButton, action: Action) {
-                if (button == MouseButton.LEFT) this@Window.background =
-                    if (action == Action.PRESS) Color.MAGENTA else Color.BLACK
-            }
-        })
     }
 
     companion object {
-        val logger = LogManager.getLogger(Window::class.java)
-
         fun randomTitleSuffix(): String {
             val url = this::class.java.getResource("/assets/title-suffixes.txt")!!
             var suffix: String
@@ -95,12 +73,14 @@ class Window(
 
         GLFW.glfwSetWindowTitle(this.glfw, this.title)
         if (this.dTime >= 0) {
-            GL11.glClearColor(
-                this.background.red,
-                this.background.green,
-                this.background.blue,
-                this.background.alpha
-            )
+            if (this.scene != null) {
+                GL11.glClearColor(
+                    this.scene!!.background.red,
+                    this.scene!!.background.green,
+                    this.scene!!.background.blue,
+                    this.scene!!.background.alpha
+                )
+            } else GL11.glClearColor(1f, 1f, 1f, 1f)
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
         }
 
