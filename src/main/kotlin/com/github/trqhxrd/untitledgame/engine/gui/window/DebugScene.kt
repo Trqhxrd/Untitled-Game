@@ -14,8 +14,10 @@ class DebugScene(window: Window) : Scene(window, "Debug Scene!", background = Co
         super.init()
         this.keyHandler.listeners.add(object : KeyboardListener {
             override fun interact(window: Window, key: Int, action: Action) {
-                if (key == GLFW.GLFW_KEY_SPACE)
+                if (key == GLFW.GLFW_KEY_SPACE){
                     this@DebugScene.background = if (action == Action.PRESS) Color.CYAN else Color.BLACK
+                this@DebugScene.window.title = "Test"
+                }
             }
         })
 

@@ -12,15 +12,33 @@ import org.lwjgl.system.MemoryUtil
 import kotlin.math.roundToInt
 
 class Window(
-    val initialWidth: Int,
-    val initialHeight: Int,
+    width: Int,
+    height: Int,
     title: String,
     var background: Color = Color.BLACK
 ) {
     private val logger = LogManager.getLogger()!!
     var glfw: Long = -1
         private set
-    var title: String
+    var title: String = title
+        set(value) {
+            if (field != value) {
+                logger.debug("Changed window title from '$field' to '$value'.")
+                field = value
+                GLFW.glfwSetWindowTitle(this.glfw, value)
+            }
+        }
+    var width: Int = width
+        set(value) {
+            if (field != value) GLFW.glfwSetWindowSize(this.glfw, value, this.height)
+            else field = value
+        }
+    var height: Int = height
+        set(value) {
+            if (field != value) GLFW.glfwSetWindowSize(this.glfw, this.width, value)
+            else field = value
+        }
+
     var scene: Scene? = null
         set(value) {
             field?.stop()
@@ -46,7 +64,7 @@ class Window(
         GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, GLFW.GLFW_TRUE)
 
         this.glfw = GLFW.glfwCreateWindow(
-            this.initialWidth, this.initialHeight, this.title,
+            this.width, this.height, this.title,
             MemoryUtil.NULL, MemoryUtil.NULL
         )
         if (this.glfw == MemoryUtil.NULL) throw IllegalStateException("Failed to create window!")
@@ -54,6 +72,12 @@ class Window(
         GLFW.glfwMakeContextCurrent(this.glfw)
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
+
+        GLFW.glfwSetWindowSizeCallback(this.glfw) { _: Long, newWidth: Int, newHeight: Int ->
+            this.width = newWidth
+            this.height = newHeight
+            logger.debug("Window '${this.title}' resized to width=$newWidth and height=$newHeight.")
+        }
 
         GLFW.glfwShowWindow(this.glfw)
     }
