@@ -7,7 +7,8 @@ import org.lwjgl.opengl.GL30
 import java.io.File
 
 class ShaderProgram(val name: String) {
-    val id = GL30.glCreateProgram()
+    var id = GL30.glCreateProgram()
+        private set
     var vertex: VertexShader? = null
         private set
     var fragment: FragmentShader? = null
@@ -41,4 +42,14 @@ class ShaderProgram(val name: String) {
     fun link() = GL30.glLinkProgram(this.id)
 
     fun unlink() = GL30.glLinkProgram(0)
+
+    fun use() = GL30.glUseProgram(this.id)
+
+    fun detach() = GL30.glUseProgram(0)
+
+    fun cleanup() {
+        this.unlink()
+        GL30.glDeleteProgram(this.id)
+        this.id = -1
+    }
 }

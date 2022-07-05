@@ -18,15 +18,19 @@ abstract class Scene(
     val mouseHandler = MouseHandler(this)
     val keyHandler = KeyHandler(this)
 
+    open fun preInit() {}
+
     open fun init(window: Window) {
         this.window = window
         this.mouseHandler.enable()
         this.keyHandler.enable()
     }
 
-    open fun preRender() = this.shader.link()
+    open fun postInit() = this.shader.link()
 
-    open fun postRender() = this.shader.unlink()
+    open fun preRender() = this.shader.use()
+
+    open fun postRender() = this.shader.detach()
 
     abstract fun render()
 

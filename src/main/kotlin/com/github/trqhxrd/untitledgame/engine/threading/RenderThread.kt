@@ -17,7 +17,7 @@ class RenderThread : AbstractThread("render", 10) {
 
     override fun init() {
         this.window = Window(1920, 1080, "The Untitled Game: ")
-        this.window.scene = DebugScene(this.window)
+        this.window.scene = DebugScene()
     }
 
     override fun loop() = this.window.update()

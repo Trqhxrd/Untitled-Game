@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL30
 import org.lwjgl.system.MemoryUtil
 import kotlin.math.roundToInt
 
@@ -30,21 +31,29 @@ class Window(
         }
     var width: Int = width
         set(value) {
-            if (field != value) GLFW.glfwSetWindowSize(this.glfw, value, this.height)
-            else field = value
+            if (field != value) {
+                GLFW.glfwSetWindowSize(this.glfw, value, this.height)
+                this.resized = true
+            } else field = value
         }
     var height: Int = height
         set(value) {
-            if (field != value) GLFW.glfwSetWindowSize(this.glfw, this.width, value)
-            else field = value
+            if (field != value) {
+                GLFW.glfwSetWindowSize(this.glfw, this.width, value)
+                this.resized = true
+            } else field = value
         }
+    var resized = false
+        private set
 
     var scene: Scene? = null
         set(value) {
             field?.stop()
             logger.debug("Switching scene from '${field?.name}' to '${value?.name}'.")
             field = value
+            value?.preInit()
             value?.init(this)
+            value?.postInit()
         }
 
     private var beginTime = 0.0
@@ -106,6 +115,11 @@ class Window(
                 )
             } else GL11.glClearColor(1f, 1f, 1f, 1f)
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
+        }
+
+        if (this.resized) {
+            this.resized = false
+            GL30.glViewport(0, 0, this.width, this.height)
         }
 
         this.scene?.preRender()
