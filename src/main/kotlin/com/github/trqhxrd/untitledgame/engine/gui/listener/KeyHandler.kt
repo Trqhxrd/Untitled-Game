@@ -14,12 +14,12 @@ open class KeyHandler(val scene: Scene) {
         val b = action != GLFW.GLFW_RELEASE
         this.keyPressed[key] = b
 
-        this.listeners.forEach { it.interact(this.scene.window, key, Action.getByGLFWId(action)) }
+        this.listeners.forEach { it.interact(this.scene.window!!, key, Action.getByGLFWId(action)) }
     }
 
     fun isPressed(key: Int) = keyPressed[key]
 
-    fun enable() = GLFW.glfwSetKeyCallback(this.scene.window.glfw, this::keyCallback)
+    fun enable() = GLFW.glfwSetKeyCallback(this.scene.window!!.glfw, this::keyCallback)
 
-    fun disable() = GLFW.glfwSetKeyCallback(this.scene.window.glfw, null)
+    fun disable() = GLFW.glfwSetKeyCallback(this.scene.window!!.glfw, null)
 }

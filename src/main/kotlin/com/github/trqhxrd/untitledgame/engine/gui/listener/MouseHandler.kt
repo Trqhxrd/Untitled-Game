@@ -39,7 +39,7 @@ open class MouseHandler(val scene: Scene) {
 
         this.moveListeners.forEach {
             it.move(
-                this.scene.window,
+                this.scene.window!!,
                 Point(this.lastX.toInt(), this.lastY.toInt()),
                 Point(this.xPos.toInt(), this.yPos.toInt()),
                 Point(this.deltaX().toInt(), this.deltaY().toInt())
@@ -55,7 +55,7 @@ open class MouseHandler(val scene: Scene) {
 
         this.clickListeners.forEach {
             it.click(
-                this.scene.window,
+                this.scene.window!!,
                 Point(this.xPos.toInt(), this.yPos.toInt()),
                 MouseButton.fromGLFWId(button),
                 Action.getByGLFWId(action)
@@ -68,7 +68,7 @@ open class MouseHandler(val scene: Scene) {
         this.scrollY = yOffset
 
         this.scrollListeners.forEach {
-            it.scroll(this.scene.window, Point(this.scrollX.toInt(), this.scrollY.toInt()))
+            it.scroll(this.scene.window!!, Point(this.scrollX.toInt(), this.scrollY.toInt()))
         }
     }
 
@@ -88,14 +88,14 @@ open class MouseHandler(val scene: Scene) {
         else false
 
     fun enable() {
-        GLFW.glfwSetCursorPosCallback(this.scene.window.glfw, this::mousePosCallback)
-        GLFW.glfwSetMouseButtonCallback(this.scene.window.glfw, this::mouseButtonCallback)
-        GLFW.glfwSetScrollCallback(this.scene.window.glfw, this::mouseScrollCallback)
+        GLFW.glfwSetCursorPosCallback(this.scene.window!!.glfw, this::mousePosCallback)
+        GLFW.glfwSetMouseButtonCallback(this.scene.window!!.glfw, this::mouseButtonCallback)
+        GLFW.glfwSetScrollCallback(this.scene.window!!.glfw, this::mouseScrollCallback)
     }
 
     fun disable() {
-        GLFW.glfwSetCursorPosCallback(this.scene.window.glfw, null)
-        GLFW.glfwSetMouseButtonCallback(this.scene.window.glfw, null)
-        GLFW.glfwSetScrollCallback(this.scene.window.glfw, null)
+        GLFW.glfwSetCursorPosCallback(this.scene.window!!.glfw, null)
+        GLFW.glfwSetMouseButtonCallback(this.scene.window!!.glfw, null)
+        GLFW.glfwSetScrollCallback(this.scene.window!!.glfw, null)
     }
 }

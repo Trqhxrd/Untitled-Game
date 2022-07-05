@@ -8,15 +8,20 @@ import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import org.lwjgl.glfw.GLFW
 import java.awt.Point
 
-class DebugScene(window: Window) : Scene(window, "Debug Scene!", background = Color.BLACK) {
+class DebugScene(window: Window) : Scene("Debug Scene!", background = Color.BLACK) {
 
-    override fun init() {
-        super.init()
+    override fun init(window: Window) {
+        super.init(window)
+        this.loadVertex(this::class.java.getResource("/assets/shaders/vertex.glsl")!!.file)
+        this.loadFragment(this::class.java.getResource("/assets/shaders/fragment.glsl")!!.file)
+
+        this.validate()
+
         this.keyHandler.listeners.add(object : KeyboardListener {
             override fun interact(window: Window, key: Int, action: Action) {
-                if (key == GLFW.GLFW_KEY_SPACE){
+                if (key == GLFW.GLFW_KEY_SPACE) {
                     this@DebugScene.background = if (action == Action.PRESS) Color.CYAN else Color.BLACK
-                this@DebugScene.window.title = "Test"
+                    this@DebugScene.window!!.title = "Test"
                 }
             }
         })
@@ -29,5 +34,6 @@ class DebugScene(window: Window) : Scene(window, "Debug Scene!", background = Co
         })
     }
 
-    override fun render() {}
+    override fun render() {
+    }
 }

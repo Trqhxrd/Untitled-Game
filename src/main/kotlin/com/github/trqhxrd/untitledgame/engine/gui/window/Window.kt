@@ -44,7 +44,7 @@ class Window(
             field?.stop()
             logger.debug("Switching scene from '${field?.name}' to '${value?.name}'.")
             field = value
-            value?.init()
+            value?.init(this)
         }
 
     private var beginTime = 0.0
@@ -107,6 +107,10 @@ class Window(
             } else GL11.glClearColor(1f, 1f, 1f, 1f)
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
         }
+
+        this.scene?.preRender()
+        this.scene?.render()
+        this.scene?.postRender()
 
         GLFW.glfwSwapBuffers(this.glfw)
 
