@@ -108,6 +108,7 @@ class Window(
         }
 
         const val GLFW_DEBUG = false
+        const val DEBUG_FPS_UPDATE_DELAY = 5
     }
 
     fun update() {
@@ -142,7 +143,7 @@ class Window(
         this.endTime = Time.now()
         this.dTime = this.endTime - this.beginTime
         this.beginTime = this.endTime
-        if (this.fpsUtil + 1 < this.endTime) {
+        if (this.fpsUtil == .0 || (this.fpsUtil + DEBUG_FPS_UPDATE_DELAY < this.endTime)) {
             this.fpsUtil = this.endTime
             logger.debug("FPS: ${(1f / this.dTime).roundToInt()}")
         }
@@ -150,9 +151,7 @@ class Window(
 
     fun closeRequested() = GLFW.glfwWindowShouldClose(this.glfw)
 
-    fun close() {
-        GLFW.glfwSetWindowShouldClose(this.glfw, true)
-    }
+    fun close() = GLFW.glfwSetWindowShouldClose(this.glfw, true)
 
     fun destroy() {
         GLFW.glfwDestroyWindow(this.glfw);
