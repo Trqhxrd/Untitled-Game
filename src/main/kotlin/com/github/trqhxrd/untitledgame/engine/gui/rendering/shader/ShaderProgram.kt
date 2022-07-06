@@ -1,5 +1,6 @@
 package com.github.trqhxrd.untitledgame.engine.gui.rendering.shader
 
+import com.github.trqhxrd.untitledgame.engine.exceptions.gui.ShaderCompilationException
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.types.FragmentShader
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.types.VertexShader
 import org.apache.logging.log4j.LogManager
@@ -16,15 +17,19 @@ class ShaderProgram(val name: String) {
     private val logger = LogManager.getLogger()!!
 
     fun validate(): Boolean {
+        val result = this.validateQuiet()
+        return if (result != 0) {
+            logger.warn(ShaderCompilationException("Shader validation for shader '${this.name}' failed ($result)."))
+            false
+        } else true
+    }
+
+    fun validateQuiet(): Int {
         var error = 0
         if (this.id == -1) error += 1
         if (this.vertex == null) error += 2
         if (this.fragment == null) error += 4
-
-        return if (error != 0) {
-            logger.warn("Shader validation for shader '${this.name}' failed ($error).")
-            false
-        } else true
+        return error
     }
 
     fun loadVertex(file: File) {

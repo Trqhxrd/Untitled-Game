@@ -2,8 +2,10 @@ package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
+import com.github.trqhxrd.untitledgame.engine.gui.rendering.Renderer
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.ShaderProgram
 import com.github.trqhxrd.untitledgame.engine.gui.util.Color
+import com.github.trqhxrd.untitledgame.engine.objects.GameObject
 import java.io.File
 
 @Suppress("LeakingThis")
@@ -17,6 +19,8 @@ abstract class Scene(
         private set
     val mouseHandler = MouseHandler(this)
     val keyHandler = KeyHandler(this)
+    val renderer = Renderer(this.shader)
+    private val objs = mutableListOf<GameObject>()
 
     open fun preInit() {}
 
@@ -32,7 +36,11 @@ abstract class Scene(
 
     open fun postRender() = this.shader.detach()
 
-    abstract fun render()
+    open fun render() {
+        if (this.validate())
+            this.renderer.render()
+    }
+
 
     open fun stop() {
         this.mouseHandler.disable()
@@ -47,5 +55,12 @@ abstract class Scene(
 
     fun loadFragment(file: String) = this.shader.loadFragment(File(file))
 
-    fun validate() = this.shader.validate()
+    open fun validate() = this.shader.validate()
+
+    open fun validateQuiet() = this.shader.validateQuiet() == 0
+
+    open fun addObject(obj: GameObject) {
+        this.objs.add(obj)
+        this.renderer.add(obj)
+    }
 }

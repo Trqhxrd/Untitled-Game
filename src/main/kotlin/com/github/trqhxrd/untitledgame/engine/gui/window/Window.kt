@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
+import org.lwjgl.opengl.GLUtil
 import org.lwjgl.system.MemoryUtil
 import kotlin.math.roundToInt
 
@@ -65,12 +66,14 @@ class Window(
         this.title = title + randomTitleSuffix()
 
         GLFWErrorCallback.createPrint(System.err).set()
+
         if (!GLFW.glfwInit()) throw IllegalStateException("GLFW could not be initialized!")
 
         GLFW.glfwDefaultWindowHints()
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE)
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE)
         GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, GLFW.GLFW_TRUE)
+        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_DEBUG_CONTEXT, GLFW.GLFW_TRUE)
 
         this.glfw = GLFW.glfwCreateWindow(
             this.width, this.height, this.title,
@@ -81,6 +84,8 @@ class Window(
         GLFW.glfwMakeContextCurrent(this.glfw)
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
+
+        GLUtil.setupDebugMessageCallback()
 
         GLFW.glfwSetWindowSizeCallback(this.glfw) { _: Long, newWidth: Int, newHeight: Int ->
             this.width = newWidth
