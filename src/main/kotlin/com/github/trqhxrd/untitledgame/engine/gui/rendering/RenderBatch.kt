@@ -129,7 +129,7 @@ class RenderBatch(val index: Int, val shader: ShaderProgram, val maxBatchSize: I
 
             // Position
             this.vertices[offset] = sprite.obj!!.boundings.x + (xAdd * sprite.obj!!.boundings.width)
-            this.vertices[offset + 1] = sprite.obj!!.boundings.y + (xAdd * sprite.obj!!.boundings.height)
+            this.vertices[offset + 1] = sprite.obj!!.boundings.y + (yAdd * sprite.obj!!.boundings.height)
 
             // Color
             this.vertices[offset + 2] = sprite.color.red

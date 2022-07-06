@@ -35,14 +35,16 @@ class Window(
             if (field != value) {
                 GLFW.glfwSetWindowSize(this.glfw, value, this.height)
                 this.resized = true
-            } else field = value
+            }
+            field = value
         }
     var height: Int = height
         set(value) {
             if (field != value) {
                 GLFW.glfwSetWindowSize(this.glfw, this.width, value)
                 this.resized = true
-            } else field = value
+            }
+            field = value
         }
     var resized = false
         private set
