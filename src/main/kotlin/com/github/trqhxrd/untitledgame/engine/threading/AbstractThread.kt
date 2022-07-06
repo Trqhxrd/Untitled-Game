@@ -2,16 +2,19 @@ package com.github.trqhxrd.untitledgame.engine.threading
 
 abstract class AbstractThread(name: String, val delay: Long) : Thread(name) {
 
-    private var shutdownScheduled = false
+    var shutdownScheduled = false
+        private set
     var hasStopped = false
         private set
 
     override fun run() {
         this.init()
-        while (!this.shutdownScheduled) {
+        do {
             sleep(this.delay)
             this.loop()
-        }
+        } while (!this.shutdownScheduled)
+        this.close()
+
         this.hasStopped = true
     }
 

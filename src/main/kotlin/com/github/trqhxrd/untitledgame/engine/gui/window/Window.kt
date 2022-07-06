@@ -75,7 +75,7 @@ class Window(
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE)
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE)
         GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, GLFW.GLFW_TRUE)
-        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_DEBUG_CONTEXT, GLFW.GLFW_TRUE)
+        if (GLFW_DEBUG) GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_DEBUG_CONTEXT, GLFW.GLFW_TRUE)
 
         this.glfw = GLFW.glfwCreateWindow(
             this.width, this.height, this.title,
@@ -87,7 +87,7 @@ class Window(
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
 
-        GLUtil.setupDebugMessageCallback()
+        if (GLFW_DEBUG) GLUtil.setupDebugMessageCallback()
 
         GLFW.glfwSetWindowSizeCallback(this.glfw) { _: Long, newWidth: Int, newHeight: Int ->
             this.width = newWidth
@@ -106,6 +106,8 @@ class Window(
             while (suffix.isBlank())
             return suffix
         }
+
+        const val GLFW_DEBUG = false
     }
 
     fun update() {
@@ -153,8 +155,9 @@ class Window(
     }
 
     fun destroy() {
-        GLFW.glfwDestroyWindow(this.glfw)
-        GLFW.glfwTerminate()
-        GLFW.glfwSetErrorCallback(null)
+        GLFW.glfwDestroyWindow(this.glfw);
+
+        GLFW.glfwTerminate();
+        GLFW.glfwSetErrorCallback(null)?.free();
     }
 }
