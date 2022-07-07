@@ -46,8 +46,8 @@ class Window(
             }
             field = value
         }
-    var resized = false
-        private set
+    private var resized = false
+    private var renamed = false
 
     var scene: Scene? = null
         set(value) {
@@ -95,6 +95,8 @@ class Window(
             logger.debug("Window '${this.title}' resized to width=$newWidth and height=$newHeight.")
         }
 
+        GLFW.glfwSetWindowCloseCallback(this.glfw) { Core.shutdown() }
+
         GLFW.glfwShowWindow(this.glfw)
     }
 
@@ -108,22 +110,18 @@ class Window(
         }
 
         const val GLFW_DEBUG = false
-        const val DEBUG_FPS_UPDATE_DELAY = 5
+        const val DEBUG_FPS_UPDATE_DELAY = 1
     }
 
     fun update() {
         GLFW.glfwPollEvents()
-
-        GLFW.glfwSetWindowTitle(this.glfw, this.title)
         if (this.dTime >= 0) {
-            if (this.scene != null) {
-                GL11.glClearColor(
-                    this.scene!!.background.red,
-                    this.scene!!.background.green,
-                    this.scene!!.background.blue,
-                    this.scene!!.background.alpha
-                )
-            } else GL11.glClearColor(1f, 1f, 1f, 1f)
+            if (this.scene != null) GL11.glClearColor(
+                this.scene!!.background.red,
+                this.scene!!.background.green,
+                this.scene!!.background.blue,
+                this.scene!!.background.alpha
+            ) else GL11.glClearColor(1f, 1f, 1f, 1f)
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
         }
 
@@ -138,8 +136,6 @@ class Window(
 
         GLFW.glfwSwapBuffers(this.glfw)
 
-        if (this.closeRequested()) Core.close()
-
         this.endTime = Time.now()
         this.dTime = this.endTime - this.beginTime
         this.beginTime = this.endTime
@@ -148,8 +144,6 @@ class Window(
             logger.debug("FPS: ${(1f / this.dTime).roundToInt()}")
         }
     }
-
-    fun closeRequested() = GLFW.glfwWindowShouldClose(this.glfw)
 
     fun close() = GLFW.glfwSetWindowShouldClose(this.glfw, true)
 
