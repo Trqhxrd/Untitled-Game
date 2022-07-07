@@ -4,7 +4,9 @@ import com.github.trqhxrd.untitledgame.engine.exceptions.gui.ShaderCompilationEx
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.types.FragmentShader
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.types.VertexShader
 import org.apache.logging.log4j.LogManager
+import org.joml.Matrix4f
 import org.lwjgl.opengl.GL30
+import org.lwjgl.system.MemoryUtil
 import java.io.File
 
 class ShaderProgram(val name: String) {
@@ -56,5 +58,12 @@ class ShaderProgram(val name: String) {
         this.unlink()
         GL30.glDeleteProgram(this.id)
         this.id = -1
+    }
+
+    fun uploadMat4f(varName: String, value: Matrix4f) {
+        val varLoc = GL30.glGetUniformLocation(this.id, varName)
+        val buf = MemoryUtil.memAllocFloat(4 * 4)
+        value.get(buf)
+        GL30.glUniformMatrix4fv(varLoc, false, buf)
     }
 }

@@ -1,11 +1,11 @@
 package com.github.trqhxrd.untitledgame.engine.gui.rendering
 
-import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.ShaderProgram
+import com.github.trqhxrd.untitledgame.engine.gui.window.Scene
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.opengl.GL30
 
-class RenderBatch(val index: Int, val shader: ShaderProgram, val maxBatchSize: Int = 1024) {
+class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024) {
     /*
      *  Vertex
      * --------
@@ -33,7 +33,7 @@ class RenderBatch(val index: Int, val shader: ShaderProgram, val maxBatchSize: I
 
     init {
         this.logger.debug("Initializing new RenderBatch with max size of ${this.maxBatchSize} with ID #${this.index}!")
-        this.shader.validate()
+        this.scene.shader.validate()
 
         // Generate and bind VAO
         this.vao = GL30.glGenVertexArrays()
@@ -62,7 +62,8 @@ class RenderBatch(val index: Int, val shader: ShaderProgram, val maxBatchSize: I
         GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, this.vbo)
         GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, 0, this.vertices)
 
-        this.shader.use()
+        this.scene.shader.use()
+        this.scene.uploadCameraDataToGPU()
 
         GL30.glBindVertexArray(this.vao)
         GL30.glEnableVertexAttribArray(0)
@@ -75,7 +76,7 @@ class RenderBatch(val index: Int, val shader: ShaderProgram, val maxBatchSize: I
         GL30.glDisableVertexAttribArray(1)
         GL30.glBindVertexArray(0)
 
-        this.shader.detach()
+        this.scene.shader.detach()
     }
 
     fun addSprite(sprite: SpriteRenderer): Boolean {

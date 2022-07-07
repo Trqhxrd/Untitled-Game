@@ -1,7 +1,6 @@
 package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.Core
-import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import com.github.trqhxrd.untitledgame.engine.gui.util.Time
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
@@ -16,8 +15,7 @@ import kotlin.math.roundToInt
 class Window(
     width: Int,
     height: Int,
-    title: String,
-    var background: Color = Color.BLACK
+    title: String
 ) {
     private val logger = LogManager.getLogger()!!
     var glfw: Long = -1
@@ -34,7 +32,7 @@ class Window(
         set(value) {
             if (field != value) {
                 GLFW.glfwSetWindowSize(this.glfw, value, this.height)
-                this.resized = true
+                GL30.glViewport(0, 0, this.width, this.height)
             }
             field = value
         }
@@ -42,12 +40,10 @@ class Window(
         set(value) {
             if (field != value) {
                 GLFW.glfwSetWindowSize(this.glfw, this.width, value)
-                this.resized = true
+                GL30.glViewport(0, 0, this.width, this.height)
             }
             field = value
         }
-    private var resized = false
-    private var renamed = false
 
     var scene: Scene? = null
         set(value) {
@@ -123,11 +119,6 @@ class Window(
                 this.scene!!.background.alpha
             ) else GL11.glClearColor(1f, 1f, 1f, 1f)
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
-        }
-
-        if (this.resized) {
-            this.resized = false
-            GL30.glViewport(0, 0, this.width, this.height)
         }
 
         this.scene?.preRender()

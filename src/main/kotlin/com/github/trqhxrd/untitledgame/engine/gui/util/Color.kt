@@ -1,5 +1,6 @@
 package com.github.trqhxrd.untitledgame.engine.gui.util
 
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
 class Color(red: Float, green: Float, blue: Float, alpha: Float) {
@@ -17,6 +18,16 @@ class Color(red: Float, green: Float, blue: Float, alpha: Float) {
     }
 
     companion object {
+        val randomProvider = { ThreadLocalRandom.current() }
+        fun random(): Color {
+            return Color(
+                this.randomProvider().nextFloat(),
+                this.randomProvider().nextFloat(),
+                this.randomProvider().nextFloat(),
+                this.randomProvider().nextFloat()
+            )
+        }
+
         val WHITE = Color(1f, 1f, 1f, 1f)
         val GRAY = Color(.5f, .5f, .5f, 1f)
         val BLACK = Color(0f, 0f, 0f, 1f)

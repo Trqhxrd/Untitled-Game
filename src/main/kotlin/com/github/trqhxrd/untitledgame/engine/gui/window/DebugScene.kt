@@ -1,9 +1,9 @@
 package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.gui.util.Color
-import com.github.trqhxrd.untitledgame.engine.gui.util.Rectangle
 import com.github.trqhxrd.untitledgame.engine.objects.GameObject
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
+import kotlin.math.sin
 
 class DebugScene : Scene("Debug Scene!", background = Color.BLACK) {
 
@@ -14,8 +14,12 @@ class DebugScene : Scene("Debug Scene!", background = Color.BLACK) {
 
         this.validate()
 
-        val obj = GameObject("Object", Rectangle(-.5f, -.5f, 1f, 1f))
-        obj.add(SpriteRenderer(Color.CYAN))
-        this.addObject(obj)
+        for (x in 0..99) {
+            for (y in 0..99) {
+                val obj = GameObject("Object", x * 8 + 8, y * 8 + 8, 4, 4)
+                obj.add(SpriteRenderer(Color(x / 100f, y / 100f, 0f, 1f)))
+                this.addObject(obj)
+            }
+        }
     }
 }

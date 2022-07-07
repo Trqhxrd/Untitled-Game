@@ -1,11 +1,12 @@
 package com.github.trqhxrd.untitledgame.engine.gui.rendering
 
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.ShaderProgram
+import com.github.trqhxrd.untitledgame.engine.gui.window.Scene
 import com.github.trqhxrd.untitledgame.engine.objects.GameObject
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
 import org.apache.logging.log4j.LogManager
 
-class Renderer(val shader: ShaderProgram) {
+class Renderer(val scene: Scene) {
     private val logger = LogManager.getLogger()
 
     companion object {
@@ -31,7 +32,7 @@ class Renderer(val shader: ShaderProgram) {
         }
 
         if (!added) {
-            val batch = RenderBatch(this.batches.size, this.shader, MAX_BATCH_SIZE)
+            val batch = RenderBatch(this.batches.size, this.scene, MAX_BATCH_SIZE)
             this.batches.add(batch)
             batch.addSprite(sprite)
         }

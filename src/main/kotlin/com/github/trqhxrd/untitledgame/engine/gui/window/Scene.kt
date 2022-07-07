@@ -2,6 +2,7 @@ package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
+import com.github.trqhxrd.untitledgame.engine.gui.rendering.Camera
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.Renderer
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.ShaderProgram
 import com.github.trqhxrd.untitledgame.engine.gui.util.Color
@@ -17,9 +18,10 @@ abstract class Scene(
 
     var window: Window? = null
         private set
+    val camera = Camera(0f, 0f)
     val mouseHandler = MouseHandler(this)
     val keyHandler = KeyHandler(this)
-    val renderer = Renderer(this.shader)
+    val renderer = Renderer(this)
     private val objs = mutableListOf<GameObject>()
 
     open fun preInit() {}
@@ -63,4 +65,6 @@ abstract class Scene(
         this.objs.add(obj)
         this.renderer.add(obj)
     }
+
+    fun uploadCameraDataToGPU() = this.camera.uploadToGPU(this.shader)
 }
