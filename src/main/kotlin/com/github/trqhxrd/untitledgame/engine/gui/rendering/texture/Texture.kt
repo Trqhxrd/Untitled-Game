@@ -43,6 +43,7 @@ class Texture(val path: String) {
             GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, this.width, this.height,
             0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, this.buffer
         )
+        GL30.glGenerateMipmap(GL30.GL_TEXTURE_2D)
 
         this.logger.debug("Uploaded texture from ${this.path}")
     }

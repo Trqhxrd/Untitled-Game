@@ -105,7 +105,7 @@ class Window(
             return suffix
         }
 
-        const val GLFW_DEBUG = false
+        const val GLFW_DEBUG = true
         const val DEBUG_FPS_UPDATE_DELAY = 1
     }
 

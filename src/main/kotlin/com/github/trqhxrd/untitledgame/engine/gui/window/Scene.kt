@@ -40,12 +40,11 @@ abstract class Scene(
 
     open fun preRender() = this.shader.use()
 
-    open fun postRender() = this.shader.detach()
-
     open fun render() {
-        if (this.validate())
-            this.renderer.render()
+        if (this.validate()) this.renderer.render()
     }
+
+    open fun postRender() = this.shader.detach()
 
 
     open fun stop() {

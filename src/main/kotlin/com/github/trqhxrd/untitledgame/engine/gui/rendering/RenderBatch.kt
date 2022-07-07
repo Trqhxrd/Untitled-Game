@@ -1,5 +1,6 @@
 package com.github.trqhxrd.untitledgame.engine.gui.rendering
 
+import com.github.trqhxrd.untitledgame.engine.gui.window.DebugScene
 import com.github.trqhxrd.untitledgame.engine.gui.window.Scene
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
 import org.apache.logging.log4j.LogManager
@@ -9,8 +10,8 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
     /*
      *  Vertex
      * --------
-     * Pos              Color
-     * float, float,    float, float, float, float
+     * Pos              Color                           Texture
+     * float, float,    float, float, float, float,     float, float
      */
     companion object {
         private const val POSITION_SIZE = 2
@@ -66,23 +67,19 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, this.vbo)
         GL30.glBufferSubData(GL30.GL_ARRAY_BUFFER, 0, this.vertices)
 
-        this.scene.shader.use()
+        GL30.glActiveTexture(GL30.GL_TEXTURE0)
+        GL30.glBindTexture(GL30.GL_TEXTURE_2D, DebugScene.texture.id)
+
         this.scene.uploadCameraDataToGPU()
 
         GL30.glBindVertexArray(this.vao)
-        GL30.glEnableVertexAttribArray(0)
-        GL30.glEnableVertexAttribArray(1)
-        GL30.glEnableVertexAttribArray(2)
 
         // Two triangles per square. Three indices per triangle.
         GL30.glDrawElements(GL30.GL_TRIANGLES, this.numSprites * 6, GL30.GL_UNSIGNED_INT, 0)
 
-        GL30.glDisableVertexAttribArray(0)
-        GL30.glDisableVertexAttribArray(1)
-        GL30.glDisableVertexAttribArray(2)
         GL30.glBindVertexArray(0)
 
-        this.scene.shader.detach()
+        //     this.scene.shader.detach()
     }
 
     fun addSprite(sprite: SpriteRenderer): Boolean {
@@ -104,8 +101,8 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         for (i in 0 until maxBatchSize) {
             val offsetIndex = 6 * i
             val offset = 4 * i
-            // Element order: 3 2 0 0 2 1
 
+            // Element order: 3 2 0 0 2 1
             // Triangle 1
             elements[offsetIndex] = offset + 3
             elements[offsetIndex + 1] = offset + 2
