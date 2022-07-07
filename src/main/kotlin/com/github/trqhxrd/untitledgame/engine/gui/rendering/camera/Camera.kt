@@ -1,4 +1,4 @@
-package com.github.trqhxrd.untitledgame.engine.gui.rendering
+package com.github.trqhxrd.untitledgame.engine.gui.rendering.camera
 
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.ShaderProgram
 import org.joml.Matrix4f
@@ -36,7 +36,7 @@ class Camera(x: Float, y: Float) {
     }
 
     fun uploadToGPU(shader: ShaderProgram) {
-        shader.uploadMat4f("uProjection", this.projection)
-        shader.uploadMat4f("uView", this.view)
+        shader.setUniform("uProjection", this.projection)
+        shader.setUniform("uView", this.view)
     }
 }

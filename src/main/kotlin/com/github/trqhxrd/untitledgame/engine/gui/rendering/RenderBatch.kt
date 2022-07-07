@@ -17,7 +17,9 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         private const val POSITION_OFFSET = 0
         private const val COLOR_SIZE = 4
         private const val COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * Float.SIZE_BYTES
-        private const val VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE
+        private const val TEXTURE_SIZE = 2
+        private const val TEXTURE_OFFSET = COLOR_OFFSET + TEXTURE_SIZE * Float.SIZE_BYTES
+        private const val VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE + TEXTURE_SIZE
         private const val VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.SIZE_BYTES
     }
 
@@ -56,6 +58,8 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         GL30.glEnableVertexAttribArray(0)
         GL30.glVertexAttribPointer(1, COLOR_SIZE, GL30.GL_FLOAT, false, VERTEX_SIZE_BYTES, COLOR_OFFSET.toLong())
         GL30.glEnableVertexAttribArray(1)
+        GL30.glVertexAttribPointer(2, TEXTURE_SIZE, GL30.GL_FLOAT, false, VERTEX_SIZE_BYTES, TEXTURE_OFFSET.toLong())
+        GL30.glEnableVertexAttribArray(2)
     }
 
     fun render() {
@@ -68,12 +72,14 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         GL30.glBindVertexArray(this.vao)
         GL30.glEnableVertexAttribArray(0)
         GL30.glEnableVertexAttribArray(1)
+        GL30.glEnableVertexAttribArray(2)
 
         // Two triangles per square. Three indices per triangle.
         GL30.glDrawElements(GL30.GL_TRIANGLES, this.numSprites * 6, GL30.GL_UNSIGNED_INT, 0)
 
         GL30.glDisableVertexAttribArray(0)
         GL30.glDisableVertexAttribArray(1)
+        GL30.glDisableVertexAttribArray(2)
         GL30.glBindVertexArray(0)
 
         this.scene.shader.detach()
@@ -137,6 +143,10 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
             this.vertices[offset + 3] = sprite.color.green
             this.vertices[offset + 4] = sprite.color.blue
             this.vertices[offset + 5] = sprite.color.alpha
+
+            // Texture
+            this.vertices[offset + 6] = xAdd
+            this.vertices[offset + 7] = yAdd
 
             offset += VERTEX_SIZE
         }

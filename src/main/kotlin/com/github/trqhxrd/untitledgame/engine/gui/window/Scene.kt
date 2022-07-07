@@ -2,11 +2,12 @@ package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.gui.listener.KeyHandler
 import com.github.trqhxrd.untitledgame.engine.gui.listener.MouseHandler
-import com.github.trqhxrd.untitledgame.engine.gui.rendering.Camera
+import com.github.trqhxrd.untitledgame.engine.gui.rendering.camera.Camera
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.Renderer
 import com.github.trqhxrd.untitledgame.engine.gui.rendering.shader.ShaderProgram
 import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import com.github.trqhxrd.untitledgame.engine.objects.GameObject
+import org.lwjgl.opengl.GL30
 import java.io.File
 
 @Suppress("LeakingThis")
@@ -32,7 +33,10 @@ abstract class Scene(
         this.keyHandler.enable()
     }
 
-    open fun postInit() = this.shader.link()
+    open fun postInit() {
+        this.shader.link()
+        GL30.glEnable(GL30.GL_DEPTH_TEST)
+    }
 
     open fun preRender() = this.shader.use()
 

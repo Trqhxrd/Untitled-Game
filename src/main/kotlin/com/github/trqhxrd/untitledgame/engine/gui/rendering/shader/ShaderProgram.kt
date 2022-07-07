@@ -60,10 +60,15 @@ class ShaderProgram(val name: String) {
         this.id = -1
     }
 
-    fun uploadMat4f(varName: String, value: Matrix4f) {
+    fun setUniform(varName: String, value: Matrix4f) {
         val varLoc = GL30.glGetUniformLocation(this.id, varName)
         val buf = MemoryUtil.memAllocFloat(4 * 4)
         value.get(buf)
         GL30.glUniformMatrix4fv(varLoc, false, buf)
+    }
+
+    fun setUniform(varName: String, value: Int) {
+        val varLoc = GL30.glGetUniformLocation(this.id, varName)
+        GL30.glUniform1i(varLoc, value)
     }
 }
