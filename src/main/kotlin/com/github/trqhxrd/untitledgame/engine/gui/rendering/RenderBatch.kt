@@ -19,7 +19,7 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         private const val COLOR_SIZE = 4
         private const val COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * Float.SIZE_BYTES
         private const val TEXTURE_SIZE = 2
-        private const val TEXTURE_OFFSET = COLOR_OFFSET + TEXTURE_SIZE * Float.SIZE_BYTES
+        private const val TEXTURE_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.SIZE_BYTES
         private const val VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE + TEXTURE_SIZE
         private const val VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.SIZE_BYTES
     }
@@ -70,7 +70,7 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         GL30.glActiveTexture(GL30.GL_TEXTURE0)
         GL30.glBindTexture(GL30.GL_TEXTURE_2D, DebugScene.texture.id)
 
-        this.scene.uploadCameraDataToGPU()
+        // this.scene.uploadCameraDataToGPU()
 
         GL30.glBindVertexArray(this.vao)
 

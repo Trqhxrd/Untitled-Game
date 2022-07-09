@@ -25,8 +25,8 @@ class DebugScene : Scene("Debug Scene!", background = Color.WHITE) {
         texture.load()
         texture.upload()
 
-        val obj = GameObject("Object", 100, 100, 256, 256)
-        obj.add(SpriteRenderer(Color.WHITE))
+        val obj = GameObject("Object", -0.5, -0.5, 1f, 1f)
+        obj.add(SpriteRenderer(Color.YELLOW))
         this.addObject(obj)
     }
 

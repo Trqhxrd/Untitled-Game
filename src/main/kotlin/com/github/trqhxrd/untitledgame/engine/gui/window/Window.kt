@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL30
 import org.lwjgl.opengl.GLUtil
 import org.lwjgl.system.MemoryUtil
@@ -112,13 +111,13 @@ class Window(
     fun update() {
         GLFW.glfwPollEvents()
         if (this.dTime >= 0) {
-            if (this.scene != null) GL11.glClearColor(
+            if (this.scene != null) GL30.glClearColor(
                 this.scene!!.background.red,
                 this.scene!!.background.green,
                 this.scene!!.background.blue,
                 this.scene!!.background.alpha
-            ) else GL11.glClearColor(1f, 1f, 1f, 1f)
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT)
+            ) else GL30.glClearColor(1f, 1f, 1f, 1f)
+            GL30.glClear(GL30.GL_COLOR_BUFFER_BIT or GL30.GL_DEPTH_BUFFER_BIT)
         }
 
         this.scene?.preRender()

@@ -13,5 +13,7 @@ out vec2 fTexture;
 void main() {
     fColor = aColor;
     fTexture = aTexture;
-    gl_Position =  uProjection * uView * vec4(aPosition, 0.0, 1.0);
+    gl_Position =
+    // uProjection * uView *
+    vec4(aPosition, 0.0, 1.0);
 }

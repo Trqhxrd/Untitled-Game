@@ -8,7 +8,7 @@ class GameObject(val name: String, var boundings: Rectangle) {
     private val components = mutableSetOf<Component>()
     private val logger = LogManager.getLogger()!!
 
-    constructor(name: String, x: Int, y: Int, width: Int, height: Int) :
+    constructor(name: String, x: Number, y: Number, width: Number, height: Number) :
             this(name, Rectangle(x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat()))
 
     init {
