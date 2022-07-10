@@ -37,24 +37,24 @@ class Texture(val path: String) {
         this.logger.debug("Uploading texture from ${this.path}")
 
         this.id = GL30.glGenTextures()
-        GL30.glBindTexture(GL30.GL_TEXTURE_2D, this.id)
+        GL30.glBindTexture(GL30.GL_TEXTURE_3D, this.id)
         GL30.glPixelStorei(GL30.GL_UNPACK_ALIGNMENT, 1)
-        GL30.glTexImage2D(
-            GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, this.width, this.height,
+        GL30.glTexImage3D(
+            GL30.GL_TEXTURE_3D, 0, GL30.GL_RGBA, this.width, this.height, 128,
             0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, this.buffer
         )
 
-        GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST)
-        GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_NEAREST)
-        GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_WRAP_S, GL30.GL_REPEAT)
-        GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_WRAP_T, GL30.GL_REPEAT)
+        GL30.glTexParameteri(GL30.GL_TEXTURE_3D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST)
+        GL30.glTexParameteri(GL30.GL_TEXTURE_3D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_NEAREST)
+        GL30.glTexParameteri(GL30.GL_TEXTURE_3D, GL30.GL_TEXTURE_WRAP_S, GL30.GL_REPEAT)
+        GL30.glTexParameteri(GL30.GL_TEXTURE_3D, GL30.GL_TEXTURE_WRAP_T, GL30.GL_REPEAT)
 
-        GL30.glGenerateMipmap(GL30.GL_TEXTURE_2D)
+        GL30.glGenerateMipmap(GL30.GL_TEXTURE_3D)
 
         this.logger.debug("Uploaded texture from ${this.path}")
     }
 
-    fun bind() = GL30.glBindTexture(GL30.GL_TEXTURE_2D, this.id)
+    fun bind() = GL30.glBindTexture(GL30.GL_TEXTURE_3D, this.id)
 
     fun cleanup() = GL30.glDeleteTextures(this.id)
 }

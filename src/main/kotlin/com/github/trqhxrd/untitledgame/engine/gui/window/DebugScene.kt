@@ -5,6 +5,7 @@ import com.github.trqhxrd.untitledgame.engine.gui.util.Color
 import com.github.trqhxrd.untitledgame.engine.gui.util.Time
 import com.github.trqhxrd.untitledgame.engine.objects.GameObject
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
+import org.lwjgl.opengl.GL30
 
 class DebugScene : Scene("Debug Scene!", background = Color.WHITE) {
 
@@ -28,6 +29,9 @@ class DebugScene : Scene("Debug Scene!", background = Color.WHITE) {
         val obj = GameObject("Object", 100, 100, 200, 200)
         obj.add(SpriteRenderer(Color.YELLOW))
         this.addObject(obj)
+
+        GL30.glActiveTexture(GL30.GL_TEXTURE0)
+        texture.bind()
     }
 
     override fun preRender() {
