@@ -5,16 +5,17 @@ import com.github.trqhxrd.untitledgame.engine.gui.window.Scene
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.opengl.GL30
+import kotlin.math.abs
 
 class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024) {
     /*
      *  Vertex
      * --------
-     * Pos              Color                           Texture
-     * float, float,    float, float, float, float,     float, float
+     * Pos                      Color                           Texture
+     * float, float, float,     float, float, float, float,     float, float
      */
     companion object {
-        private const val POSITION_SIZE = 2
+        private const val POSITION_SIZE = 3
         private const val POSITION_OFFSET = 0
         private const val COLOR_SIZE = 4
         private const val COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * Float.SIZE_BYTES
@@ -70,7 +71,7 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         GL30.glActiveTexture(GL30.GL_TEXTURE0)
         GL30.glBindTexture(GL30.GL_TEXTURE_2D, DebugScene.texture.id)
 
-        // this.scene.uploadCameraDataToGPU()
+        this.scene.uploadCameraDataToGPU()
 
         GL30.glBindVertexArray(this.vao)
 
@@ -78,8 +79,6 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
         GL30.glDrawElements(GL30.GL_TRIANGLES, this.numSprites * 6, GL30.GL_UNSIGNED_INT, 0)
 
         GL30.glBindVertexArray(0)
-
-        //     this.scene.shader.detach()
     }
 
     fun addSprite(sprite: SpriteRenderer): Boolean {
@@ -131,19 +130,21 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
                 else -> {}
             }
 
+            var add = 0
             // Position
-            this.vertices[offset] = sprite.obj!!.boundings.x + (xAdd * sprite.obj!!.boundings.width)
-            this.vertices[offset + 1] = sprite.obj!!.boundings.y + (yAdd * sprite.obj!!.boundings.height)
+            this.vertices[offset + add++] = sprite.obj!!.boundings.x + (xAdd * sprite.obj!!.boundings.width)
+            this.vertices[offset + add++] = sprite.obj!!.boundings.y + (yAdd * sprite.obj!!.boundings.height)
+            this.vertices[offset + add++] = sprite.obj!!.boundings.z
 
             // Color
-            this.vertices[offset + 2] = sprite.color.red
-            this.vertices[offset + 3] = sprite.color.green
-            this.vertices[offset + 4] = sprite.color.blue
-            this.vertices[offset + 5] = sprite.color.alpha
+            this.vertices[offset + add++] = sprite.color.red
+            this.vertices[offset + add++] = sprite.color.green
+            this.vertices[offset + add++] = sprite.color.blue
+            this.vertices[offset + add++] = sprite.color.alpha
 
             // Texture
-            this.vertices[offset + 6] = xAdd
-            this.vertices[offset + 7] = yAdd
+            this.vertices[offset + add++] = xAdd
+            this.vertices[offset + add++] = abs(yAdd - 1f)
 
             offset += VERTEX_SIZE
         }

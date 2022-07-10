@@ -49,7 +49,7 @@ class Texture(val path: String) {
         GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_WRAP_S, GL30.GL_REPEAT)
         GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_WRAP_T, GL30.GL_REPEAT)
 
-        //GL30.glGenerateMipmap(GL30.GL_TEXTURE_2D)
+        GL30.glGenerateMipmap(GL30.GL_TEXTURE_2D)
 
         this.logger.debug("Uploaded texture from ${this.path}")
     }

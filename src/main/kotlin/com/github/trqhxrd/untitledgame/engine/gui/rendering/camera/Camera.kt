@@ -19,14 +19,17 @@ class Camera(x: Float, y: Float) {
     val projection = Matrix4f()
     val view = Matrix4f()
         get() {
-            return field.identity()
-                .lookAt(this.position, this.cameraFront().add(this.x, this.y, 0f), this.cameraUp())
+            return field.identity().lookAt(
+                this.position, this.cameraFront()
+                    .add(this.x, this.y, 0f), this.cameraUp()
+            )
         }
     private val cameraFront = { Vector3f(0f, 0f, -1f) }
     private val cameraUp = { Vector3f(0f, 1f, 0f) }
     private val regeneratePositionVector = { this.position.set(this.x, this.y, 20f).let { } }
 
     init {
+        this.regeneratePositionVector()
         this.adjustProjection()
     }
 

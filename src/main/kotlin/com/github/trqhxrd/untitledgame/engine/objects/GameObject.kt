@@ -1,15 +1,15 @@
 package com.github.trqhxrd.untitledgame.engine.objects
 
-import com.github.trqhxrd.untitledgame.engine.gui.util.Rectangle
+import com.github.trqhxrd.untitledgame.engine.gui.util.Boundings
 import org.apache.logging.log4j.LogManager
 
-class GameObject(val name: String, var boundings: Rectangle) {
+class GameObject(val name: String, var boundings: Boundings) {
 
     private val components = mutableSetOf<Component>()
     private val logger = LogManager.getLogger()!!
 
-    constructor(name: String, x: Number, y: Number, width: Number, height: Number) :
-            this(name, Rectangle(x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat()))
+    constructor(name: String, x: Number, y: Number, width: Number, height: Number, z: Number = 0) :
+            this(name, Boundings(x.toFloat(), y.toFloat(), width.toFloat(), height.toFloat(), z.toFloat()))
 
     init {
         this.logger.debug("Created new GameObject '${this.name}'.")
