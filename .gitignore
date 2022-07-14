@@ -33,5 +33,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-
-hs_err_pid*.log
