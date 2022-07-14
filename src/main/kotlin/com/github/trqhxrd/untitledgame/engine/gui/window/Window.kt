@@ -1,6 +1,7 @@
 package com.github.trqhxrd.untitledgame.engine.gui.window
 
 import com.github.trqhxrd.untitledgame.engine.Core
+import com.github.trqhxrd.untitledgame.engine.gui.rendering.texture.TextureAtlas
 import com.github.trqhxrd.untitledgame.engine.gui.util.Time
 import org.apache.logging.log4j.LogManager
 import org.lwjgl.glfw.GLFW
@@ -81,6 +82,8 @@ class Window(
         GLFW.glfwMakeContextCurrent(this.glfw)
         GLFW.glfwSwapInterval(1)
         GL.createCapabilities()
+
+        TextureAtlas.init()
 
         if (GLFW_DEBUG) GLUtil.setupDebugMessageCallback()
 

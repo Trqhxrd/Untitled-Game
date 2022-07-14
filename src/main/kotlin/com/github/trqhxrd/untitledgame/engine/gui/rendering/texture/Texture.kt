@@ -37,7 +37,7 @@ class Texture(val path: String) {
         this.logger.debug("Uploading texture from ${this.path}")
 
         this.id = GL30.glGenTextures()
-        GL30.glBindTexture(GL30.GL_TEXTURE_3D, this.id)
+        this.bind()
         GL30.glPixelStorei(GL30.GL_UNPACK_ALIGNMENT, 1)
         GL30.glTexImage3D(
             GL30.GL_TEXTURE_3D, 0, GL30.GL_RGBA, this.width, this.height, 128,
