@@ -3,11 +3,11 @@
 in vec4 fColor;
 in vec2 fTexture;
 
-uniform sampler3D textureSampler;
+uniform sampler2D textureSampler;
 
 out vec4 color;
 
 void main() {
-    color = texture3D(textureSampler, vec3(fTexture, 0));
+    color = texture2D(textureSampler, vec2(fTexture));
 // color = fColor;
 }

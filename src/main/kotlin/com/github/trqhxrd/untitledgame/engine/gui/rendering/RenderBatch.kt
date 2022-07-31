@@ -1,6 +1,5 @@
 package com.github.trqhxrd.untitledgame.engine.gui.rendering
 
-import com.github.trqhxrd.untitledgame.engine.gui.window.DebugScene
 import com.github.trqhxrd.untitledgame.engine.gui.window.Scene
 import com.github.trqhxrd.untitledgame.engine.objects.components.SpriteRenderer
 import org.apache.logging.log4j.LogManager
@@ -140,8 +139,9 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
             this.vertices[offset + add++] = sprite.color.alpha
 
             // Texture
-            this.vertices[offset + add++] = xAdd
-            this.vertices[offset + add++] = abs(yAdd - 1f)
+            this.vertices[offset + add++] = sprite.textureCoordinates.first + xAdd * sprite.textureDimensions.first
+            this.vertices[offset + add++] =
+                sprite.textureCoordinates.second + abs(yAdd - 1f) * sprite.textureDimensions.second
 
             offset += VERTEX_SIZE
         }

@@ -285,9 +285,16 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api-kotlin</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.l33tlabs.twl</groupId>
             <artifactId>pngdecoder</artifactId>
             <version>${pngdecoder.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
