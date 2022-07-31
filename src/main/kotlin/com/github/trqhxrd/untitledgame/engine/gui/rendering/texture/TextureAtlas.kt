@@ -1,14 +1,15 @@
 package com.github.trqhxrd.untitledgame.engine.gui.rendering.texture
 
 import org.apache.logging.log4j.kotlin.Logging
+import org.lwjgl.opengl.GL30
 import java.awt.Point
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
 class TextureAtlas(
-    val width: Int,
-    val height: Int,
+    val width: Int = GL30.glGetInteger(GL30.GL_MAX_TEXTURE_SIZE),
+    val height: Int = GL30.glGetInteger(GL30.GL_MAX_TEXTURE_SIZE),
     val tileWidth: Int,
     val tileHeight: Int
 ) : Logging {
@@ -24,18 +25,18 @@ class TextureAtlas(
     init {
         this.logger.debug(
             "Initializing new TextureAtlas with width=${this.width}, height=${this.height}, " +
-                    "tileWidth=${this.tileWidth}, tileHeight=${this.tileHeight}. ${this.width * this.height} " +
+                    "tileWidth=${this.tileWidth}, tileHeight=${this.tileHeight}. " +
+                    "${(this.width / this.tileWidth) * (this.height / this.tileHeight)} " +
                     "tiles will be available on this atlas."
         )
 
-        this.tileDimensions = this.tileWidth.toFloat() / (this.width * this.tileWidth) to
-                this.tileHeight.toFloat() / (this.height * this.tileHeight)
+        this.tileDimensions = this.tileWidth.toFloat() / this.width to this.tileHeight.toFloat() / this.height
         this.image = BufferedImage(
-            this.width * this.tileWidth,
-            this.height * this.tileHeight,
+            this.width,
+            this.height,
             BufferedImage.TYPE_INT_ARGB
         )
-        this.tiles = Array(this.width) { Array(this.height) { false } }
+        this.tiles = Array(this.width / this.tileWidth) { Array(this.height / this.tileHeight) { false } }
     }
 
     fun tilesLeft() = this.tiles.flatten().filter { !it }.size
@@ -75,13 +76,12 @@ class TextureAtlas(
         return texture
     }
 
-    fun normalize(point: Point) = point.x.toFloat() / (this.width * this.tileWidth) to
-            point.y.toFloat() / (this.height / this.tileHeight)
+    fun normalize(point: Point) = point.x.toFloat() / this.width to point.y.toFloat() / this.height
 
     fun get(name: String) = this.normalize(this.mapping[name]!!)
 
     private fun findTile(): Point {
         val index = this.tiles.flatten().indexOfFirst { !it }
-        return Point(index / width, index % width)
+        return Point(index / (this.width / this.tileWidth), index % (this.width / this.tileWidth))
     }
 }
