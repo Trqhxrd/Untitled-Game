@@ -139,9 +139,9 @@ class RenderBatch(val index: Int, val scene: Scene, val maxBatchSize: Int = 1024
             this.vertices[offset + add++] = sprite.color.alpha
 
             // Texture
-            this.vertices[offset + add++] = sprite.textureCoordinates.first + xAdd * sprite.textureDimensions.first
+            this.vertices[offset + add++] = sprite.coordsNormalized.first + xAdd * sprite.dimensionsNormalized.first
             this.vertices[offset + add++] =
-                sprite.textureCoordinates.second + abs(yAdd - 1f) * sprite.textureDimensions.second
+                sprite.coordsNormalized.second + abs(yAdd - 1f) * sprite.dimensionsNormalized.second
 
             offset += VERTEX_SIZE
         }

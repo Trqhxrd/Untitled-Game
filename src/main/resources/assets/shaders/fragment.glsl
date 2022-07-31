@@ -9,5 +9,4 @@ out vec4 color;
 
 void main() {
     color = texture2D(textureSampler, vec2(fTexture));
-// color = fColor;
 }

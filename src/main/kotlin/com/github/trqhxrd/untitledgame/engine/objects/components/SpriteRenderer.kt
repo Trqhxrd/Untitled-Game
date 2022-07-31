@@ -5,6 +5,6 @@ import com.github.trqhxrd.untitledgame.engine.objects.Component
 
 class SpriteRenderer(
     val color: Color = Color.WHITE,
-    val textureCoordinates: Pair<Float, Float>,
-    val textureDimensions: Pair<Float, Float>
+    val coordsNormalized: Pair<Float, Float>,
+    val dimensionsNormalized: Pair<Float, Float>
 ) : Component()
