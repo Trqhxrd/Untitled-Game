@@ -48,7 +48,7 @@
         <lwjgl.version>3.3.1</lwjgl.version>
         <joml.version>1.10.4</joml.version>
         <pngdecoder.version>1.0</pngdecoder.version>
-        <junit.version>5.8.2</junit.version>
+        <junit.version>5.9.0</junit.version>
         <log4j.version>2.18.0</log4j.version>
         <lombok.version>1.18.24</lombok.version>
     </properties>
